@@ -1,0 +1,72 @@
+﻿'USEUNIT CommonPage
+'USEUNIT ExcelDataAccess
+'USEUNIT Allocator
+'USEUNIT TestParameters
+'USEUNIT FrameworkParameters
+'USEUNIT CommonBusinessFunctions
+'USEUNIT WebElementFinder
+'USEUNIT WebActions
+'USEUNIT ReportLogger
+'USEUNIT ReportingFunctions
+
+Private po_lnkBillPay : po_lnkBillPay = "xpath=//*[contains(text(),'Bill Pay')]"
+Private po_txtPayeeName : po_txtPayeeName ="css=input[name='payee.name']"
+Private po_txtAddress : po_txtAddress ="css=input[name='payee.address.street']"
+Private po_txtCity : po_txtCity ="css=input[name='payee.address.city']"
+Private po_txtState : po_txtState ="css=input[name='payee.address.state']"
+Private po_txtZipCode : po_txtZipCode ="css=input[name='payee.address.zipCode']"
+Private po_txtPhone : po_txtPhone ="css=input[name='payee.phoneNumber']"
+Private po_txtAccountNumber : po_txtAccountNumber ="css=input[name='payee.accountNumber']"
+Private po_txtVerifyAccount : po_txtVerifyAccount ="css=input[name='verifyAccount']"
+Private po_txtBillPayAmount : po_txtBillPayAmount ="css=input[name='amount']"
+Private po_btnSendPayments : po_btnSendPayments =  "xpath=//input[@value='Send Payment']"
+Private po_lblBillPaymentCompleted : po_lblBillPaymentCompleted = "xpath=//*[contains(text(),'Bill Payment Complete')]" 
+
+'#Function Description  : Function to click BillPay link
+Function ClickLnkBillPay()
+  Call WebActions.ClickElement(FindPageChildElementByXPath(objPage,po_lnkBillPay))
+End Function
+
+'#Function Description  : Function to enter payee information
+Function Enterpayee_information(strField, strValue)
+  'IsElementExist(WaitPageElementByCss(objPage,po_txtPayeeName))
+  if strField="PayeeName"  then
+  Call WebActions.ClickElementAndLog(FindElementByCss(objPage,po_txtPayeeName),"PayeeName")
+  Call WebActions.SetKeys(FindElementByCss(objPage,po_txtPayeeName),strValue)
+  Elseif strField="Address" then
+  Call WebActions.SetKeys(FindElementByCss(objPage,po_txtAddress),strValue)
+  Elseif strField="City" then
+  Call WebActions.SetKeys(FindElementByCss(objPage,po_txtCity),strValue)
+  Elseif strField="State" then
+  Call WebActions.SetKeys(FindElementByCss(objPage,po_txtState),strValue)
+  Elseif strField="ZipCode" then
+  Call WebActions.SetKeys(FindElementByCss(objPage,po_txtZipCode),strValue)
+  Else
+  Call WebActions.SetKeys(FindElementByCss(objPage,po_txtPhone),strValue)
+  End If
+End Function
+
+'#Function Description  : Function to enter Account information
+Function EnterAccount_information(strField,strValue)
+  if strField="AccountNumber"  then
+  Call WebActions.SetKeys(FindElementByCss(objPage,po_txtAccountNumber),strValue)
+  Elseif strField="VerifyAccount" then
+  Call WebActions.SetKeys(FindElementByCss(objPage,po_txtVerifyAccount),strValue)
+  Else
+  Call WebActions.SetKeys(FindElementByCss(objPage,po_txtBillPayAmount),strValue)
+  End If
+End Function
+
+'#Function Description  : Function to click Send Payments button
+Function ClickBtnSendPayments()
+  Call WebActions.ClickElement(FindPageChildElementByXPath(objPage,po_btnSendPayments))
+End Function
+
+'#Function Description  : Function to check success message
+Function IsPaymentMsgExists()
+  If IsElementExist(FindPageChildElementByXPath(objPage,po_lblBillPaymentCompleted)) Then
+    LogMessage "Bill Payment completed Successfully"
+  Else
+    LogErrorWithImage "Bill Payment Failed"
+  End If
+End Function

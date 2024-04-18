@@ -1,0 +1,443 @@
+﻿'USEUNIT Waits
+'USEUNIT ErrorConstants
+'USEUNIT TestParameters
+
+Option Explicit
+
+Public strDelay
+Private eleLocator
+
+'######################################################################################################################################
+'#Function Name     : GetLocator
+'#Function Description  : retrive the locator from the element locator
+'#Function Parameters   : elementLocator which contains xpath/css/properties
+'#Return Value          : element locator string 
+'#Date                  : 23-Apr-2020
+'#Author(s)             : VAM
+'#######################################################################################################################################
+Public Function GetLocator(elementLocator)
+Dim elementLocatorType
+eleLocator = elementLocator
+      elementLocatorType = Split(elementLocator,"=")(0)
+      Select Case Trim(UCase(elementLocatorType))
+            Case "XPATH"
+                  GetLocator = Mid(elementLocator,7)
+            Case "CSS"
+                  GetLocator = Mid(elementLocator,5)
+            Case "PROPS"
+                  GetLocator = GetElementProperties(elementLocator)
+            Case Else
+   Err.Raise ErrorConstants.E_INVALID_LOCATOR, "GetLocator", "Invalid Locator : Unable to retrieve Web Element locator from the input : " & Now()
+      End Select
+End Function
+
+'######################################################################################################################################
+'#Function Name     : GetElementProperties
+'#Function Description  : retrive the locator from the element locator
+'#Function Parameters   : elementLocator which contains xpath/css/properties
+'#Return Value          : elmenter locator string 
+'#Date                  : 23-Apr-2020
+'#Author(s)             : VAM
+'#######################################################################################################################################
+Public Function GetElementProperties(propDetails)
+      Dim propNames,propValues,properties,i
+properties = Split(Replace(Mid(propDetails,8), "]",""), ",")
+      For i = 0 To UBound(properties)
+            propNames = propNames & "," & Split(properties(i), "=")(0)
+            propValues = propValues & "," & Split(properties(i), "=")(1)
+      Next
+      GetElementProperties = Mid(propNames,2) & "@" & Mid(propValues,2)
+End Function
+Public Function GetArray(StringToArray)
+GetArray = Split(StringToArray,",")
+End Function
+
+'######################################################################################################################################
+'#Function Name     : FindElement
+'#Function Description  : Locate the element in html dom by using Test Complete Find method
+'#Function Parameters   : Webpage object and web element properties
+'#Return Value          : An object reference of the web element if found else throw error
+'#Date                  : 23-Apr-2020
+'#Author(s)             : VAM
+'#######################################################################################################################################
+Public Function FindElement(webPage,propDetails)
+Dim propNames,propValues,properties
+On Error Resume Next
+      properties = GetLocator(propDetails)
+      propNames = GetArray(Split(properties,"@")(0))
+      propValues = GetArray(Split(properties,"@")(1))
+  
+  Do Until EvaluateElementByProperty(webPage,propNames,propValues) = True
+    strDelay = strDelay + 1000
+    Delay 1000
+    If strDelay >= 10000 Then
+      Exit Do
+    End If
+  Loop
+  
+ Set FindElement = webPage.Find(propNames,propValues,90,true)
+
+On Error GoTo 0
+If IsNull(FindElement) Then
+  RaiseElementException "FindElement"
+End If
+  strDelay = 0
+End Function
+
+'######################################################################################################################################
+'#Function Name     : FindAllElement
+'#Function Description  : Locate all elements in html dom by using FindAll Test Complete method
+'#Function Parameters   : Webpage object and web element properties
+'#Return Value          : An object reference of the web elements if found else throw error
+'#Date                  : 23-Apr-2020
+'#Author(s)             : VAM
+'#######################################################################################################################################
+Public Function FindAllElement(webPage,propDetails)
+Dim propNames,propValues,properties
+On Error Resume Next
+      properties = GetLocator(propDetails)
+      propNames = GetArray(Split(properties,"@")(0))
+      propValues = GetArray(Split(properties,"@")(1))
+      Set FindAllElement = webPage.FindAll(propNames,propValues,60,true)
+On Error GoTo 0
+If IsNull(FindAllElement) Then
+  RaiseElementException "FindAllElement"
+End If
+End Function
+
+'######################################################################################################################################
+'#Function Name     : FindAllChildElement
+'#Function Description  : Locate all child elements in html dom by using FindAllChildren Test Complete method
+'#Function Parameters   : Webpage object and web element properties
+'#Return Value          : An object reference of the web elements if found else throw error
+'#Date                  : 23-Apr-2020
+'#Author(s)             : VAM
+'#######################################################################################################################################
+Public Function FindAllChildElement(webPage,propDetails)
+Dim propNames,propValues,properties
+On Error Resume Next
+      properties = GetLocator(propDetails)
+      propNames = GetArray(Split(properties,"@")(0))
+      propValues = GetArray(Split(properties,"@")(1))
+      Set FindAllChildElement = webPage.FindAllChildren(propNames,propValues,60,true)
+On Error GoTo 0
+If IsNull(FindAllChildElement) Then
+  RaiseElementException "FindAllChildElement"
+End If
+End Function
+
+'######################################################################################################################################
+'#Function Name     : FindChildElement
+'#Function Description  : Locate a child element in html dom by using FindChild Test Complete method
+'#Function Parameters   : Webpage object and web element properties
+'#Return Value          : An object reference of the web elements if found else throw error
+'#Date                  : 23-Apr-2020
+'#Author(s)             : VAM
+'#######################################################################################################################################
+Public Function FindChildElement(webPage,propDetails)
+Dim propNames,propValues,properties
+On Error Resume Next
+      properties = GetLocator(propDetails)
+      propNames = GetArray(Split(properties,"@")(0))
+      propValues = GetArray(Split(properties,"@")(1))
+      Set FindChildElement = webPage.FindChild(propNames,propValues,60,true)
+On Error GoTo 0
+If IsNull(FindChildElement) Then
+  RaiseElementException "FindChildElement"
+End If
+End Function
+
+'######################################################################################################################################
+'#Function Name     : FindElementByCss
+'#Function Description  : Locate a element in html dom by using QuerySelector Test Complete method
+'#Function Parameters   : Webpage object and css locator of the element
+'#Return Value          : An object reference of the web elemens if found else throw error
+'#Date                  : 23-Apr-2020
+'#Author(s)             : VAM
+'#######################################################################################################################################
+Public Function FindElementByCss(webPage,css)
+
+' On Error Resume Next
+' If EvaluateElementByCSS(webPage,css) = True Then
+'    Set FindElementByCss = webPage.QuerySelector(GetLocator(css))
+' Else
+'    strDelay = strDelay + 500
+'    Delay 500
+'    If strDelay <= 20000 Then
+'      Call FindElementByCss(webPage,css)
+'    End If
+' End If
+      
+On Error Resume Next
+Do Until EvaluateElementByCSS(webPage,css) = True
+    strDelay = strDelay + 1000
+    Delay 1000
+    If strDelay >= 5000 Then
+      Exit Do
+    End If
+Loop
+Set FindElementByCss = webPage.QuerySelector(GetLocator(css))
+
+ On Error GoTo 0
+If IsNull(FindElementByCss) Then
+  RaiseElementException "FindElementByCss"
+End If
+strDelay = 0
+
+End Function
+
+'######################################################################################################################################
+'#Function Name     : FindPageChildElementByXPath
+'#Function Description  : Locate a element in html dom by using FindChildByXPath Test Complete method
+'#Function Parameters   : Webpage object and xpath locator of the element
+'#Return Value          : An object reference of the web element if found else throw error
+'#Date                  : 23-Apr-2020
+'#Author(s)             : VAM
+'#######################################################################################################################################
+
+Public Function FindPageChildElementByXPath(webPage,xpath)
+On Error Resume Next
+Do Until EvaluateElementByXPath(webPage,xpath) = True
+    strDelay = strDelay + 1000
+    Delay 1000
+    If strDelay >= 5000 Then
+      Exit Do
+    End If
+Loop
+Set FindPageChildElementByXPath = webPage.FindChildByXPath(GetLocator(xpath))    
+On Error GoTo 0
+If IsNull(FindPageChildElementByXPath) Then
+  RaiseElementException "FindPageChildElementByXPath"
+End If
+strDelay = 0
+End Function
+'######################################################################################################################################
+'#Function Name     : EvaluateElementByXPath
+'#Function Description  : Verify a element in html dom by using EvaluateXPath Test Complete method
+'#Function Parameters   : Webpage object and xpath locator of the element
+'#Return Value          : An object reference of the web element if found else throw error
+'#Date                  : 23-Apr-2020
+'#Author(s)             : VAM
+'#######################################################################################################################################
+Public Function EvaluateElementByXPath(webPage,xpath)
+On Error Resume Next
+Dim webObj
+      Set webObj= webPage.FindChildByXPath(GetLocator(xpath))
+     If Not webObj is Nothing Then
+        EvaluateElementByXPath= True
+     Else 
+        EvaluateElementByXPath= False
+    End If 
+ On Error GoTo 0
+
+End Function
+
+
+'######################################################################################################################################
+'#Function Name     : EvaluateElementByProperties
+'#Function Description  : Verify a element in html dom by using EvaluateXPath Test Complete method
+'#Function Parameters   : Webpage object and xpath locator of the element
+'#Return Value          : An object reference of the web element if found else throw error
+'#Date                  : 23-Apr-2020
+'#Author(s)             : VAM
+'#######################################################################################################################################
+Public Function EvaluateElementByProperty(webPage,propNames,propValues)
+On Error Resume Next
+Dim webObj
+      Set webObj= webPage.Find(propNames,propValues,60,true)
+     If webObj.Exists Then
+        EvaluateElementByProperty= True
+     Else 
+        EvaluateElementByProperty= False
+    End If 
+ On Error GoTo 0
+
+End Function
+
+'######################################################################################################################################
+'#Function Name     : EvaluateElementByXPath
+'#Function Description  : Verify a element in html dom by using EvaluateXPath Test Complete method
+'#Function Parameters   : Webpage object and xpath locator of the element
+'#Return Value          : An object reference of the web element if found else throw error
+'#Date                  : 23-Apr-2020
+'#Author(s)             : VAM
+'#######################################################################################################################################
+Public Function EvaluateElementByCSS(webPage,css)
+On Error Resume Next
+Dim arrObj
+      arrObj= webPage.QuerySelector(GetLocator(css))
+  
+     If Not arrObj Is Nothing Then
+        EvaluateElementByCSS= True
+     Else 
+        EvaluateElementByCSS= False
+    End If 
+ On Error GoTo 0
+
+End Function
+
+'######################################################################################################################################
+'#Function Name     : FindWebChildElementByXPath
+'#Function Description  : Locate a element in html dom by using FindChildByXPath Test Complete method
+'#Function Parameters   : WebElement object and xpath locator of the element
+'#Return Value          : An object reference of the web element if found else throw error
+'#Date                  : 23-Apr-2020
+'#Author(s)             : VAM
+'#######################################################################################################################################
+Public Function FindWebChildElementByXPath(webElement,xpath)
+On Error Resume Next
+      Set FindWebChildElementByXPath = webElement.FindChildByXPath(GetLocator(xpath))
+On Error GoTo 0
+If IsNull(FindWebChildElementByXPath) Then
+  RaiseElementException "FindWebChildElementByXPath"
+End If
+End Function
+
+'######################################################################################################################################
+'#Function Name     : FindPageElementByXPath
+'#Function Description  : Locate a element in html dom by using FindElement Test Complete method(Suppotrs only in:TC 14.40 onwards)
+'#Function Parameters   : WebPage object and xpath locator of the element
+'#Return Value          : An object reference of the web element if found else throw error
+'#Date                  : 23-Apr-2020
+'#Author(s)             : VAM
+'#######################################################################################################################################
+Public Function FindPageElementByXPath(webPage,xpath)
+On Error Resume Next
+      Set FindPageElementByXPath = webPage.FindElement(GetLocator(xpath))
+On Error GoTo 0
+If IsNull(FindPageElementByXPath) Then
+  RaiseElementException "FindPageElementByXPath"
+End If
+End Function
+
+'######################################################################################################################################
+'#Function Name     : FindPageElementByCss
+'#Function Description  : Locate a element in html dom by using FindElement Test Complete method(Suppotrs only in:TC 14.40 onwards)
+'#Function Parameters   : WebPage object and css locator of the element
+'#Return Value          : An object reference of the web element if found else throw error
+'#Date                  : 23-Apr-2020
+'#Author(s)             : VAM
+'#######################################################################################################################################
+Public Function FindPageElementByCss(webPage,css)
+On Error Resume Next
+      Set FindPageElementByCss = webPage.FindElement(GetLocator(css))
+On Error GoTo 0
+If IsNull(FindPageElementByCss) Then
+  RaiseElementException "FindPageElementByCss"
+End If
+End Function
+
+'######################################################################################################################################
+'#Function Name     : FindWebElementByXPath
+'#Function Description  : Locate a element in html dom by using FindElement Test Complete method(Suppotrs only in:TC 14.40 onwards)
+'#Function Parameters   : WebElement object and xpath locator of the element
+'#Return Value          : An object reference of the web element if found else throw error
+'#Date                  : 23-Apr-2020
+'#Author(s)             : VAM
+'#######################################################################################################################################
+Public Function FindWebElementByXPath(webElement,xpath)
+On Error Resume Next
+      Set FindWebElementByXPath = webElement.FindElement(GetLocator(xpath))
+On Error GoTo 0
+If IsNull(FindWebElementByXPath) Then
+  RaiseElementException "FindWebElementByXPath"
+End If
+End Function
+
+'######################################################################################################################################
+'#Function Name     : FindWebElementByCss
+'#Function Description  : Locate a element in html dom by using FindElement Test Complete method(Suppotrs only in:TC 14.40 onwards)
+'#Function Parameters   : WebElement object and css locator of the element
+'#Return Value          : An object reference of the web element if found else throw error
+'#Date                  : 23-Apr-2020
+'#Author(s)             : VAM
+'#######################################################################################################################################
+Public Function FindWebElementByCss(webElement,css)
+On Error Resume Next
+      Set FindWebElementByCss = webElement.FindElement(GetLocator(css))
+On Error GoTo 0
+If IsNull(FindWebElementByCss) Then
+  RaiseElementException "FindWebElementByCss"
+End If
+End Function
+
+'######################################################################################################################################
+'#Function Name     : WaitPageElementByXPath
+'#Function Description  : Locate a element in html dom by using WaitElement Test Complete method(Suppotrs only in:TC 14.40 onwards)
+'#Function Parameters   : WebPage object and xapth locator of the element
+'#Return Value          : An object reference of the web element if found else throw error
+'#Date                  : 23-Apr-2020
+'#Author(s)             : VAM
+'#######################################################################################################################################
+Public Function WaitPageElementByXPath(webPage,xpath)
+On Error Resume Next
+      Set WaitPageElementByXPath = webPage.WaitElement(GetLocator(xpath),GetWebElementSyncMaxTimeout)
+On Error GoTo 0
+If IsNull(WaitPageElementByXPath) Then
+  RaiseElementException "WaitPageElementByXPath"
+End If
+End Function
+
+'######################################################################################################################################
+'#Function Name     : WaitPageElementByByCss
+'#Function Description  : Locate a element in html dom by using WaitElement Test Complete method(Suppotrs only in:TC 14.40 onwards)
+'#Function Parameters   : WebPage object and css locator of the element
+'#Return Value          : An object reference of the web element if found else throw error
+'#Date                  : 23-Apr-2020
+'#Author(s)             : VAM
+'#######################################################################################################################################
+Public Function WaitPageElementByCss(webPage,css)
+On Error Resume Next
+      Set WaitPageElementByCss = webPage.WaitElement(GetLocator(css),GetWebElementSyncMaxTimeout)
+On Error GoTo 0
+If IsNull(WaitPageElementByCss) Then
+  RaiseElementException "WaitPageElementByCss"
+End If
+End Function
+
+'######################################################################################################################################
+'#Function Name     : WaitWebElementByXPath
+'#Function Description  : Locate a element in html dom by using WaitElement Test Complete method(Suppotrs only in:TC 14.40 onwards)
+'#Function Parameters   : WebElement object and xpath locator of the element
+'#Return Value          : An object reference of the web element if found else throw error
+'#Date                  : 23-Apr-2020
+'#Author(s)             : VAM
+'#######################################################################################################################################
+Public Function WaitWebElementByXPath(webElement,xpath)
+On Error Resume Next
+      Set WaitWebElementByXPath = webElement.WaitElement(GetLocator(xpath),GetWebElementSyncMaxTimeout)
+On Error GoTo 0
+If IsNull(WaitWebElementByXPath) Then
+  RaiseElementException "WaitWebElementByXPath"
+End If
+End Function
+
+'######################################################################################################################################
+'#Function Name     : WaitWebElementByCss
+'#Function Description  : Locate a element in html dom by using WaitElement Test Complete method(Suppotrs only in:TC 14.40 onwards)
+'#Function Parameters   : WebElement object and css locator of the element
+'#Return Value          : An object reference of the web element if found else throw error
+'#Date                  : 23-Apr-2020
+'#Author(s)             : VAM
+'#######################################################################################################################################
+Public Function WaitWebElementByCss(webElement,css)
+On Error Resume Next
+      Set WaitWebElementByCss = webElement.WaitElement(GetLocator(css),GetWebElementSyncMaxTimeout)
+On Error GoTo 0
+If IsNull(WaitWebElementByCss) Then
+  RaiseElementException "WaitWebElementByCss"
+End If
+End Function
+
+'######################################################################################################################################
+'#Function Name     : RaiseElementException
+'#Function Description  : To raise error if a Web Element not found in the web page
+'#Function Parameters   : funtionName
+'#Return Value          : None
+'#Date                  : 23-Apr-2020
+'#Author(s)             : VAM
+'#######################################################################################################################################
+Public Sub RaiseElementException(funtionName)
+Err.Raise ErrorConstants.E_ELEMENT_NOT_FOUND, funtionName,_
+funtionName & " : NoSuchElement: Unable to locate any element in current web page by using " & eleLocator & ",Error Number:" & ErrorConstants.E_ELEMENT_NOT_FOUND & " : " & Now()
+End Sub

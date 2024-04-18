@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Scenarios>
+	<Folder Name="PARA BANK">
+		<Feature Path="ParaBank_Login.feature" />
+		<Feature Path="ParaBank_NewAccount.feature" />
+		<Feature Path="ParaBank_TransferFunds.feature" />
+		<Feature Path="ParaBank_Payments.feature" />
+		<Feature Path="ParaBank_RequestLoan.feature" />
+	</Folder>
+</Scenarios>

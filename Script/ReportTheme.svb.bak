@@ -1,0 +1,72 @@
+﻿
+Dim gobjReportTheme: Set gobjReportTheme = New ReportTheme
+
+Class ReportTheme
+	Private m_strHeadingBackColor
+	Private m_strHeadingForeColor
+	Private m_strSectionBackColor
+	Private m_strSectionForeColor
+	Private m_strContentBackColor
+	Private m_strContentForeColor
+	
+	'###################################################################################################################
+	Public Property Get HeadingBackColor
+		HeadingBackColor = m_strHeadingBackColor
+	End Property
+	
+	Public Property Let HeadingBackColor(strHeadingBackColor)
+		m_strHeadingBackColor = strHeadingBackColor
+	End Property
+	'###################################################################################################################
+	
+	'###################################################################################################################
+	Public Property Get HeadingForeColor
+		HeadingForeColor = m_strHeadingForeColor
+	End Property
+	
+	Public Property Let HeadingForeColor(strHeadingForeColor)
+		m_strHeadingForeColor = strHeadingForeColor
+	End Property
+	'###################################################################################################################
+	
+	'###################################################################################################################
+	Public Property Get SectionBackColor
+		SectionBackColor = m_strSectionBackColor
+	End Property
+	
+	Public Property Let SectionBackColor(strSectionBackColor)
+		m_strSectionBackColor = strSectionBackColor
+	End Property
+	'###################################################################################################################
+	
+	'###################################################################################################################
+	Public Property Get SectionForeColor
+		SectionForeColor = m_strSectionForeColor
+	End Property
+	
+	Public Property Let SectionForeColor(strSectionForeColor)
+		m_strSectionForeColor = strSectionForeColor
+	End Property
+	'###################################################################################################################
+	
+	'###################################################################################################################
+	Public Property Get ContentBackColor
+		ContentBackColor = m_strContentBackColor
+	End Property
+	
+	Public Property Let ContentBackColor(strContentBackColor)
+		m_strContentBackColor = strContentBackColor
+	End Property
+	'###################################################################################################################
+	
+	'###################################################################################################################
+	Public Property Get ContentForeColor
+		ContentForeColor = m_strContentForeColor
+	End Property
+	
+	Public Property Let ContentForeColor(strContentForeColor)
+		m_strContentForeColor = strContentForeColor
+	End Property
+	'###################################################################################################################
+	
+End Class

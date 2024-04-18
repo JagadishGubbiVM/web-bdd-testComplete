@@ -1,0 +1,102 @@
+﻿' Find, FindAll, FindChild, FindAllChildren
+
+
+
+
+Public oBrowser, oPage
+Public Function LaunchApplication(vUrl)
+On Error Resume Next
+      Call closeAllBrowsers()
+      Browsers.Item(btChrome).Run (vUrl)
+      Set oBrowser = Sys.Browser("*")
+      Set oPage = Sys.Browser("*").Page("*")
+      oBrowser.BrowserWindow(0).Maximize
+      If (oPage.Exists) Then
+        Log.Message + "Browser Launched successfully" '+ takeScreenshot()
+      Else
+        Log.Error + "Browser not Launched successfully" + takeScreenshot()
+     End If
+On Error GoTo 0
+End Function
+
+
+
+txtUserName = "adminCLEAR"
+txtUnameUsername = "Username"
+txtUname = "//input[@id = 'txtUsername']"
+
+'Set objTextBox = oPage.Find(idStr, "txtUsername", 90, True)
+'Set objTextBox = oPage.Find(xPath)
+
+
+
+Public Function enterText(xPath, inputText, ElementName)
+  On Error Resume Next
+  If oPage.Exists Then
+  Set objTextBox = oPage.FindChildByXPath(xPath)
+    If (objTextBox.Exists) Then
+      objTextBox.SetText(inputText)
+      Log.Message ElementName + " is entered"
+    Else
+      Log.Error ElementName + " is not entered" + takeScreenshot()
+    End If
+ End If
+On Error Goto 0
+Set objTextBox = Nothing
+End Function
+
+'******************************
+Call enterText(txtUname, txtUserName, txtUnameUsername)
+
+
+
+
+'********************************************************************************************************************************************
+'*************************************************Function to Wait for an Object************************************************************
+'********************************************************************************************************************************************
+Public Function clickOnElementByXpath(xPath, ElementName)
+On Error Resume Next
+  If oPage.Exists Then
+'  oPage.Wait(10000)
+   Set objElement = oPage.FindChildByXPath(xPath)
+    If objElement.Exists Then
+       objType = objElement.ObjectType
+          objType = LCase (objType)
+          objType = getObjectType()
+          objElement.Click
+        Log.Message "Clicked on "+ ElementName + " " + objType
+      Else
+        Log.Error "Not Clicked on "+ ElementName + " " + objType + takeScreenshot()
+    End If
+    End If
+On Error Goto 0
+Set objElement = Nothing
+Set objType = Nothing
+End Function
+
+
+
+
+
+Public Function waitForElement(oObj)
+  
+End Function
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

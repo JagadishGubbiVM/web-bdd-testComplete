@@ -1,0 +1,322 @@
+﻿'USEUNIT CommonPage
+'USEUNIT ExcelDataAccess
+'USEUNIT Allocator
+'USEUNIT TestParameters
+'USEUNIT FrameworkParameters
+'USEUNIT CommonBusinessFunctions
+'USEUNIT WebElementFinder
+'USEUNIT WebActions
+'USEUNIT ReportLogger
+'USEUNIT ReportingFunctions
+
+'Login Page objects
+Private po_lblLogin : po_lblLogin="css=img[title='ParaBank']" 
+Private po_txtUserId : po_txtUserId ="css=input[name='username']"
+Private po_txtPassword : po_txtPassword ="css=input[name='password']"
+Private po_btnLogIn : po_btnLogIn ="xpath=//input[@value='Log In']"
+Private po_lblHome : po_lblHome = "xpath=//div[@id='leftPanel']//child::b[1]" 
+Private po_btnOk_SignOut : po_btnOk_SignOut ="xpath=//*[contains(text(),'Log Out')]"
+Private po_lnkOpenNewAccount : po_lnkOpenNewAccount ="xpath=//*[contains(text(),'Open New Account')]"
+Private po_slctAccountType : po_slctAccountType ="xpath=//select[@id='type']"
+Private po_btnOpenNewAccount : po_btnOpenNewAccount = "xpath=//input[@value='Open New Account']"
+Private po_lblCongratulations : po_lblCongratulations = "xpath=//*[contains(text(),'Congratulations, your account is now open.')]" 
+Private po_lnkTransferFunds : po_lnkTransferFunds ="xpath=//*[contains(text(),'Transfer Funds')]"
+Private po_txtAmount : po_txtAmount ="css=input[id='amount']"
+Private po_slctFromAccountNumber : po_slctFromAccountNumber  ="xpath=//select[@id='fromAccountId']"
+Private po_slctToAccountNumber : po_slctToAccountNumber  ="xpath=//select[@id='toAccountId']"
+Private po_btnTransferFunds : po_btnTransferFunds = "xpath=//input[@value='Transfer']"
+Private po_lblTransferCompleted : po_lblTransferCompleted = "xpath=//*[contains(text(),'Transfer Complete!')]" 
+Private po_lnkBillPay : po_lnkBillPay = "xpath=//*[contains(text(),'Bill Pay')]"
+Private po_txtPayeeName : po_txtPayeeName ="css=input[name='payee.name']"
+Private po_txtAddress : po_txtAddress ="css=input[name='payee.address.street']"
+Private po_txtCity : po_txtCity ="css=input[name='payee.address.city']"
+Private po_txtState : po_txtState ="css=input[name='payee.address.state']"
+Private po_txtZipCode : po_txtZipCode ="css=input[name='payee.address.zipCode']"
+Private po_txtPhone : po_txtPhone ="css=input[name='payee.phoneNumber']"
+Private po_txtAccountNumber : po_txtAccountNumber ="css=input[name='payee.accountNumber']"
+Private po_txtVerifyAccount : po_txtVerifyAccount ="css=input[name='verifyAccount']"
+Private po_txtBillPayAmount : po_txtBillPayAmount ="css=input[name='amount']"
+Private po_btnSendPayments : po_btnSendPayments =  "xpath=//input[@value='Send Payment']"
+Private po_lblBillPaymentCompleted : po_lblBillPaymentCompleted = "xpath=//*[contains(text(),'Bill Payment Complete')]" 
+Private po_txtLoanAmount : po_txtLoanAmount  ="css=input[id='amount']"
+Private po_txtDownPayment : po_txtDownPayment  ="css=input[id='downPayment']"
+Private po_btnApplyNow : po_btnApplyNow = "xpath=//input[@value='Apply Now']"
+Private po_lblLoanRequestProcessed : po_lblLoanRequestProcessed  = "xpath=//*[contains(text(),'Congratulations, your loan has been approved.')]"  
+Private po_lnkRequestLoan : po_lnkRequestLoan = "xpath=//*[contains(text(),'Request Loan')]"
+'###########################################################################################################################################
+'#Function Description  : Function to verify Login page exist or not
+'#Function Parameters   : None
+'#Return Value          : None
+'#Date                  : 17-07-2022
+'#Author(s)             : Satish Ravula
+'###########################################################################################################################################
+Function IsLoginPageExist()
+  If   IsElementExist(FindElementByCss(objPage,po_lblLogin)) Then
+    LogMessage "Login Page is displayed"
+    Call takeScreenshot()
+  Else
+    LogErrorWithImage "Login Page is not displayed"
+  End If
+End Function
+
+'###########################################################################################################################################
+'#Function Description  : Function to Enter User Id in User Id field
+'#Function Parameters   : User iD from database table 
+'#Return Value          : None
+'#Date                  : 17-07-2022
+'#Author(s)             : Satish Ravula
+'###########################################################################################################################################
+Function EnterUserId(dbStrUserId)
+  Call WebActions.ClickElement(FindElementByCss(objPage,po_lblLogin))
+  Call WebActions.ClickElementAndLog(FindElementByCss(objPage,po_txtUserId),"Username")
+  Call WebActions.SetKeys(FindElementByCss(objPage,po_txtUserId),dbStrUserId)
+
+End Function
+
+
+'###########################################################################################################################################
+'#Function Description  : Function to Enter Password in Password field
+'#Function Parameters   : Password from database table 
+'#Return Value          : None
+'#Date                  : 17-07-2022
+'#Author(s)             : Satish Ravula
+'###########################################################################################################################################
+Function EnterPassword(dbStrPassword)
+  Call WebActions.ClickElementAndLog(FindElementByCss(objPage,po_txtPassword),"Password")
+  Call WebActions.SetKeys(FindElementByCss(objPage,po_txtPassword),dbStrPassword)
+End Function
+
+'###########################################################################################################################################
+'#Function Description  : Function to Click on LOGIN Button 
+'#Function Parameters   : WebElement Object Name
+'#Return Value          : None
+'#Date                  : 17-07-2022
+'#Author(s)             : Satish Ravula
+'###########################################################################################################################################
+Function ClickLogInButton()
+  Call WebActions.ClickElement(FindPageChildElementByXPath(objPage,po_btnLogIn))
+  Call ReportingFunctions.takeScreenshot()
+End Function
+
+'###########################################################################################################################################
+'#Function Description  : Function to verify User is navigated to Home page or not
+'#Function Parameters   : None
+'#Return Value          : None
+'#Date                  : 17-07-2022
+'#Author(s)             : Satish Ravula
+'###########################################################################################################################################
+Function IsHomePageExists()
+  If IsElementExist(FindPageChildElementByXPath(objPage,po_lblHome)) Then    
+    LogMessageWithImage "Home page is Dispalyed"
+  Else
+    LogErrorWithImage "Home page is not Dispalyed"
+  End If
+End Function
+
+'###########################################################################################################################################
+'#Function Description  : Function to Click on SignOut  
+'#Function Parameters   : WebElement Object name
+'#Return Value          : None
+'#Date                  : 17-07-2022
+'#Author(s)             : Satish Ravula
+'###########################################################################################################################################
+Function ClickSignOut()
+  Call WebActions.ClickElement(FindPageChildElementByXPath(objPage,po_btnOk_SignOut))
+  Delay(2000)
+  Call ReportingFunctions.takeScreenshot()
+End Function
+
+'###########################################################################################################################################
+'#Function Description  : Function to Click on SignOut  
+'#Function Parameters   : WebElement Object name
+'#Return Value          : None
+'#Date                  : 17-07-2022
+'#Author(s)             : Satish Ravula
+'###########################################################################################################################################
+Function ClickLnkOpenNewAccount()
+  Call WebActions.ClickElement(FindPageChildElementByXPath(objPage,po_lnkOpenNewAccount))
+End Function
+
+'###########################################################################################################################################
+'#Function Description  : Function to Enter User Id in User Id field
+'#Function Parameters   : User iD from database table 
+'#Return Value          : None
+'#Date                  : 17-07-2022
+'#Author(s)             : Satish Ravula
+'###########################################################################################################################################
+Function SelectAccountType(slctProductType)
+  Delay(2000)
+  Call WebActions.ClickElementAndLog(FindPageChildElementByXPath(objPage,po_slctAccountType),slctProductType)
+  Call WebActions.selectItem(FindPageChildElementByXPath(objPage,po_slctAccountType),slctProductType,"Account Type")
+End Function
+
+'###########################################################################################################################################
+'#Function Description  : Function to Click on LOGIN Button 
+'#Function Parameters   : WebElement Object Name
+'#Return Value          : None
+'#Date                  : 17-07-2022
+'#Author(s)             : Satish Ravula
+'###########################################################################################################################################
+Function ClickBtnOpenNewAccount()
+  Call WebActions.ClickElement(FindPageChildElementByXPath(objPage,po_btnOpenNewAccount))
+  Call ReportingFunctions.takeScreenshot()
+End Function
+
+'###########################################################################################################################################
+'#Function Description  : Function to verify User is navigated to Home page or not
+'#Function Parameters   : None
+'#Return Value          : None
+'#Date                  : 17-07-2022
+'#Author(s)             : Satish Ravula
+'###########################################################################################################################################
+Function IsMsgExists()
+  If IsElementExist(FindPageChildElementByXPath(objPage,po_lblCongratulations)) Then
+    LogMessageWithImage "New Account Opened Successfully"
+  Else
+    LogErrorWithImage "New Account Opening Failed"
+  End If
+End Function
+
+'###########################################################################################################################################
+'#Function Description  : Function to Click on SignOut  
+'#Function Parameters   : WebElement Object name
+'#Return Value          : None
+'#Date                  : 17-07-2022
+'#Author(s)             : Satish Ravula
+'###########################################################################################################################################
+Function ClickLnkTransferFunds()
+  Call WebActions.ClickElement(FindPageChildElementByXPath(objPage,po_lnkTransferFunds))
+End Function
+
+'###########################################################################################################################################
+'#Function Description  : Function to Enter Password in Password field
+'#Function Parameters   : Password from database table 
+'#Return Value          : None
+'#Date                  : 17-07-2022
+'#Author(s)             : Satish Ravula
+'###########################################################################################################################################
+Function EnterAmount(StrAmount)
+  Call WebActions.ClickElementAndLog(FindElementByCss(objPage,po_txtAmount),"Amount")
+  Call WebActions.SetKeys(FindElementByCss(objPage,po_txtAmount),StrAmount)
+End Function
+
+'###########################################################################################################################################
+'#Function Description  : Function to Enter User Id in User Id field
+'#Function Parameters   : User iD from database table 
+'#Return Value          : None
+'#Date                  : 17-07-2022
+'#Author(s)             : Satish Ravula
+'###########################################################################################################################################
+Function SelectAccountNumber(strFromAccount,strToAccount)
+  Call WebActions.selectItem(FindPageChildElementByXPath(objPage,po_slctFromAccountNumber),strFromAccount,"From Account")
+  Call WebActions.selectItem(FindPageChildElementByXPath(objPage,po_slctToAccountNumber),strToAccount, "To Account")
+End Function
+
+'###########################################################################################################################################
+'#Function Description  : Function to Click on LOGIN Button 
+'#Function Parameters   : WebElement Object Name
+'#Return Value          : None
+'#Date                  : 17-07-2022
+'#Author(s)             : Satish Ravula
+'###########################################################################################################################################
+Function ClickBtnTransferFunds()
+  Call WebActions.ClickElement(FindPageChildElementByXPath(objPage,po_btnTransferFunds))
+End Function
+
+Function ClickBtnSendPayments()
+  Call WebActions.ClickElement(FindPageChildElementByXPath(objPage,po_btnSendPayments))
+End Function
+
+Function ClickBtnApplyNow()
+  Call WebActions.ClickElement(FindPageChildElementByXPath(objPage,po_btnApplyNow))
+End Function
+
+'###########################################################################################################################################
+'#Function Description  : Function to verify User is navigated to Home page or not
+'#Function Parameters   : None
+'#Return Value          : None
+'#Date                  : 17-07-2022
+'#Author(s)             : Satish Ravula
+'###########################################################################################################################################
+Function IsTransferMsgExists()
+  If  IsElementExist(FindPageChildElementByXPath(objPage,po_lblTransferCompleted)) Then
+    LogMessageWithImage "Trasfer completed Successfully"
+  Else
+    LogErrorWithImage "Trasfer Failed"
+  End If
+End Function
+
+Function IsPaymentMsgExists()
+  If IsElementExist(FindPageChildElementByXPath(objPage,po_lblBillPaymentCompleted)) Then
+    LogMessageWithImage "Bill Payment completed Successfully"
+  Else
+    LogErrorWithImage "Bill Payment Failed"
+  End If
+End Function
+
+Function IsLoanMsgExists()
+  If  IsElementExist(FindPageChildElementByXPath(objPage,po_lblLoanRequestProcessed)) Then   
+    LogMessageWithImage "Congratulations, your loan has been approved."
+  Else
+    LogErrorWithImage "Loan Request Failed"
+  End If
+End Function
+'###########################################################################################################################################
+'#Function Description  : Function to Click on SignOut  
+'#Function Parameters   : WebElement Object name
+'#Return Value          : None
+'#Date                  : 17-07-2022
+'#Author(s)             : Satish Ravula
+'###########################################################################################################################################
+Function ClickLnkBillPay()
+  Call WebActions.ClickElement(FindPageChildElementByXPath(objPage,po_lnkBillPay))
+End Function
+
+Function ClickLnkRequestLoan()
+  Call WebActions.ClickElement(FindPageChildElementByXPath(objPage,po_lnkRequestLoan))
+End Function
+
+'###########################################################################################################################################
+'#Function Description  : Function to Enter User Id in User Id field
+'#Function Parameters   : User iD from database table 
+'#Return Value          : None
+'#Date                  : 17-07-2022
+'#Author(s)             : Satish Ravula
+'###########################################################################################################################################
+Function Enterpayee_information(strField, strValue)
+  'IsElementExist(WaitPageElementByCss(objPage,po_txtPayeeName))
+  if strField="PayeeName"  then
+  Call WebActions.ClickElementAndLog(FindElementByCss(objPage,po_txtPayeeName),"PayeeName")
+  Call WebActions.SetKeys(FindElementByCss(objPage,po_txtPayeeName),strValue)
+  Elseif strField="Address" then
+  Call WebActions.SetKeys(FindElementByCss(objPage,po_txtAddress),strValue)
+  Elseif strField="City" then
+  Call WebActions.SetKeys(FindElementByCss(objPage,po_txtCity),strValue)
+  Elseif strField="State" then
+  Call WebActions.SetKeys(FindElementByCss(objPage,po_txtState),strValue)
+  Elseif strField="ZipCode" then
+  Call WebActions.SetKeys(FindElementByCss(objPage,po_txtZipCode),strValue)
+  Else
+  Call WebActions.SetKeys(FindElementByCss(objPage,po_txtPhone),strValue)
+  End If
+End Function
+
+Function EnterAccount_information(strField,strValue)
+  if strField="AccountNumber"  then
+  Call WebActions.SetKeys(FindElementByCss(objPage,po_txtAccountNumber),strValue)
+  Elseif strField="VerifyAccount" then
+  Call WebActions.SetKeys(FindElementByCss(objPage,po_txtVerifyAccount),strValue)
+  Else
+  Call WebActions.SetKeys(FindElementByCss(objPage,po_txtBillPayAmount),strValue)
+  End If
+End Function
+
+Function EnterLoan_information(strField,strValue)
+  'IsElementExist(WaitPageElementByCss(objPage,po_txtLoanAmount))
+  if strField="LoanAmount"  then
+  Call WebActions.ClickElementAndLog(FindElementByCss(objPage,po_txtLoanAmount),"LoanAmount")
+  Call WebActions.SetKeys(FindElementByCss(objPage,po_txtLoanAmount),strValue)
+  Elseif strField="DownPayment" then
+  Call WebActions.SetKeys(FindElementByCss(objPage,po_txtDownPayment),strValue)
+  End If
+End Function

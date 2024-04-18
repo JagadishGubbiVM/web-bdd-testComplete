@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE Nodes [
+
+<!ENTITY % NameValue "CDATA">
+<!ENTITY % PropType "(I|S|D|L|H|B)">
+<!ENTITY % VersionValue "CDATA">
+
+<!ELEMENT Prp (#PCDATA)>
+<!ELEMENT Node (Node|Prp)*>
+<!ELEMENT Nodes (Node)+>
+
+<!ATTLIST Nodes version CDATA "1">
+
+<!ATTLIST Node name CDATA #REQUIRED>
+
+<!ATTLIST Prp name CDATA #REQUIRED>
+<!ATTLIST Prp type CDATA #REQUIRED>
+<!ATTLIST Prp value CDATA #REQUIRED>
+]>
+<Nodes version="1">
+	<Node name="root">
+		<Node name="data">
+			<Node name="logs">
+				<Prp name="key" type="S" value="{C3FEECAC-E3E5-49F5-B13A-F388CF8A87EA}"/>
+				<Prp name="relpath" type="S" value="Log"/>
+			</Node>
+			<Node name="variables">
+				<Node name="datav4">
+					<Node name="var0">
+						<Node name="value">
+							<Prp name="strvalue" type="H" value="43003A005C00550073006500720073005C007300610074006900730068002E0072006100760075006C0061005C0044006F00630075006D0065006E00740073005C00540065007300740043006F006D0070006C0065007400650020004600720061006D00650077006F0072006B005F0056002E0033005F0032003000320032005C00700072006F006A006500630074002D0074006500730074002D006100750074006F006D006100740069006F006E002D006600720061006D00650077006F0072006B005C007700650062002D006100750074006F006D006100740069006F006E00"/>
+						</Node>
+						<Prp name="name" type="S" value="ProjectPath"/>
+					</Node>
+					<Node name="var1">
+						<Node name="value">
+							<Prp name="strvalue" type="H" value="43003A005C00550073006500720073005C007300610074006900730068002E0072006100760075006C0061005C0044006F00630075006D0065006E00740073005C00540065007300740043006F006D0070006C0065007400650020004600720061006D00650077006F0072006B005F0056002E0033005F0032003000320032005C00700072006F006A006500630074002D0074006500730074002D006100750074006F006D006100740069006F006E002D006600720061006D00650077006F0072006B005C007700650062002D006100750074006F006D006100740069006F006E005C00300032005F0045007800650063007500740069006F006E005F004D0061006E0061006700650072005C00520075006E00530065007400740069006E00670073002E0078006D006C00"/>
+						</Node>
+						<Prp name="name" type="S" value="RunSettingPath"/>
+					</Node>
+					<Node name="var10">
+						<Node name="value">
+							<Prp name="strvalue" type="H" value=" "/>
+						</Node>
+						<Prp name="name" type="S" value="uatAppIdSingleOwner"/>
+					</Node>
+					<Node name="var11">
+						<Node name="value">
+							<Prp name="strvalue" type="H" value=" "/>
+						</Node>
+						<Prp name="name" type="S" value="sitExistCustAppId"/>
+					</Node>
+					<Node name="var12">
+						<Node name="value">
+							<Prp name="strvalue" type="H" value=" "/>
+						</Node>
+						<Prp name="name" type="S" value="uatExistCustAppId"/>
+					</Node>
+					<Node name="var13">
+						<Node name="value">
+							<Prp name="intvalue" type="I" value="0"/>
+						</Node>
+						<Prp name="name" type="S" value="sitHealthCheckDbParam"/>
+					</Node>
+					<Node name="var14">
+						<Node name="value">
+							<Prp name="intvalue" type="I" value="0"/>
+						</Node>
+						<Prp name="name" type="S" value="uatHealthCheckDbParam"/>
+					</Node>
+					<Node name="var15">
+						<Prp name="name" type="S" value="intGetTransactionsCount"/>
+					</Node>
+					<Node name="var2">
+						<Node name="value">
+							<Prp name="strvalue" type="H" value="43003A005C004100750074006F006D006100740069006F006E005F004600720061006D00650057006F0072006B005C00530061006C00650065006D004300680061006E006700650073005C007000750062002D006100750074006F006D006100740069006F006E002D006600720061006D00650077006F0072006B005C007700650062002D006100750074006F006D006100740069006F006E005C00300031005F0054006500730074005F0044006100740061005C00440041004F00"/>
+						</Node>
+						<Prp name="name" type="S" value="DatabasePath"/>
+					</Node>
+					<Node name="var3">
+						<Node name="value">
+							<Prp name="strvalue" type="H" value="500042002D0031003000300035002000500042002D003100350030003100200056006500720069006600790020005000610072006100420061006E006B0020007500730065007200200069007300200074006F002000610062006C0065002000720065007100750065007300740020004C006F0061006E00"/>
+						</Node>
+						<Prp name="name" type="S" value="scenarioName"/>
+					</Node>
+					<Node name="var4">
+						<Node name="value">
+							<Prp name="boolvalue" type="B" value="0"/>
+						</Node>
+						<Prp name="name" type="S" value="screenshotLogger"/>
+					</Node>
+					<Node name="var5">
+						<Node name="value">
+							<Prp name="strvalue" type="H" value=" "/>
+						</Node>
+						<Prp name="name" type="S" value="sitAppIdSoleProp"/>
+					</Node>
+					<Node name="var6">
+						<Node name="value">
+							<Prp name="strvalue" type="H" value=" "/>
+						</Node>
+						<Prp name="name" type="S" value="uatAppIdSoleProp"/>
+					</Node>
+					<Node name="var7">
+						<Node name="value">
+							<Prp name="strvalue" type="H" value=" "/>
+						</Node>
+						<Prp name="name" type="S" value="sitAppIdSingleMemberLlc"/>
+					</Node>
+					<Node name="var8">
+						<Node name="value">
+							<Prp name="strvalue" type="H" value=" "/>
+						</Node>
+						<Prp name="name" type="S" value="uatAppIdSingleMemberLlc"/>
+					</Node>
+					<Node name="var9">
+						<Node name="value">
+							<Prp name="strvalue" type="H" value=" "/>
+						</Node>
+						<Prp name="name" type="S" value="sitAppIdSingleOwner"/>
+					</Node>
+				</Node>
+				<Prp name="version" type="I" value="4"/>
+			</Node>
+		</Node>
+		<Prp name="signature" type="S" value="{49FC0C30-9EF7-4DBD-97A8-B7A00E79A2AF}"/>
+	</Node>
+</Nodes>

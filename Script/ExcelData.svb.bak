@@ -1,0 +1,57 @@
+﻿'###################################################################################################################
+'#Function Description	: Function to get Test data file path dynmical
+'#Input Parameters		  : strQuery
+'#Return Value			    : None
+'#Author					      : Satish Ravula
+'#Date Created			    : 17-July-2022
+'###################################################################################################################
+
+Function RetrieveTestDataPaths()   
+Dim Path
+  ' Obtains the path to the current project path & files
+  ProjectPath = Project.Path
+  testData=ProjectPath& "01_Test_Data\Demo_TestData.xlsx"
+  RetrieveTestDataPaths = testdata
+End Function
+
+
+'###################################################################################################################
+'#Function Description	: Function to Read Excel for Test data and data will be stored in Dictionary object(i.e key and value)
+'#Input Parameters		  : strQuery
+'#Return Value			    : None
+'#Author					      : Satish Ravula
+'#Date Created			    : 17-July-2022
+'###################################################################################################################
+
+Function GetTestDataByTestDataID(wrkshtname,strScenarioId,strDataSetId)
+On Error Resume Next
+  Dim objTestDataDict,Excel, RowCount, ColumnCount, i, j
+  ExlTestData = RetrieveTestDataPaths
+  Log.Message ExlTestData
+  Set Excel = createobject("Excel.Application")
+  Set objExcelbook = Excel.Workbooks.Open(ExlTestData)
+  Set objExcelsheet = objExcelbook.Worksheets(wrkshtname)
+  RowCount = objExcelsheet.UsedRange.Rows.Count
+  ColumnCount = objExcelsheet.UsedRange.Columns.Count
+  Set objTestDataDict = Createobject("Scripting.dictionary")  
+  For i= 2 to RowCount
+    For j= 1 to ColumnCount
+     dictScenarioIdKey = Trim(objExcelsheet.Cells(1,j))  
+     dictScenarioIdVal = Trim(objExcelsheet.Cells(i,j))
+     dictTestDataIdKey = Trim(objExcelsheet.Cells(1,2))  
+     dictTestDataIdVal = Trim(objExcelsheet.Cells(i,j))
+     if (strScenarioId=dictScenarioIdVal and strDataSetId=dictTestDataIdVal) then
+     dictKey = Trim(objExcelsheet.Cells(1,j))  
+     dictVal = Trim(objExcelsheet.Cells(i,j))  
+     objTestDataDict.Add dictKey,dictVal 
+     End If 
+    Next
+  Next
+ Set OrangeHRMTestdata = objTestDataDict
+ Excel.Quit
+ Set objExcelsheet = Nothing
+ Set objExcelbook =Nothing
+ Set Excel = Nothing
+On Error GoTo 0
+End Function
+

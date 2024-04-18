@@ -1,0 +1,86 @@
+﻿
+
+'###########################################################################################################################################
+'#Function Name     : HandleAlert
+'#Function Description  : It will handle Alerts
+'#Function Parameters   : 
+'#Return Value          : None
+'#Date                  : 5-June-2020
+'#Author(s)             : VAM
+'###########################################################################################################################################
+Sub HandleAlert()
+' Set objPage = Sys.Browser().objPage("*")
+ If objPage.Alert.Exists Then
+  objPage.Alert.Button("OK").Click
+ End If
+End Sub
+
+'###########################################################################################################################################
+'#Function Name     : HandlePrompt
+'#Function Description  : Generic Function to verify web element exist or not
+'#Function Parameters   : Web Element Object Reference
+'#Return Value          : None
+'#Date                  : 5-June-2020
+'#Author(s)             : VAM
+'###########################################################################################################################################
+Sub HandlePrompt(input)
+' Set objPage = Sys.Browser().objPage("*")
+ If objPage.Prompt.Exists Then
+  objPage.Prompt.Value = input
+  objPage.Prompt.Button("OK").Click
+ End If
+End Sub
+
+'###########################################################################################################################################
+'#Function Name     : HandlePopup
+'#Function Description  : Generic Function to verify web element exist or not
+'#Function Parameters   : Web Element Object Reference
+'#Return Value          : None
+'#Date                  : 5-June-2020
+'#Author(s)             : VAM
+'###########################################################################################################################################
+Sub HandlePopup()
+ url = "https://www.peoples.com/personal/checking"
+ Browsers.Item(btIExplorer).Run(url)
+ Set objPage = Sys.Browser().objPage("*")
+ If objPage.PopupMenu.Exists Then
+  objPage.PopupMenu.Click
+ End If
+End Sub
+
+'###########################################################################################################################################
+'#Function Name     : HandlingEvent
+'#Function Description  : Generic Function to verify web element exist or not
+'#Function Parameters   : Web Element Object Reference
+'#Return Value          : None
+'#Date                  : 8-June-2020
+'#Author(s)             : VAM
+'###########################################################################################################################################
+Public Sub HandlingEvents()
+ If objPage.Alert.Exists Then
+  objPage.Alert.Button("OK").Click
+ ElseIf objPage.Prompt.Exists Then
+  objPage.Prompt.Value = input'par
+  objPage.Prompt.Button("OK").Click
+ ElseIf objPage.PopupMenu.Exists Then
+  objPage.PopupMenu.Click
+ End If
+End Sub
+
+
+'###########################################################################################################################################
+'#Function Name     : DragDrop
+'#Function Description  : Generic Function to Drag and Drop an element
+'#Function Parameters   : None
+'#Return Value          : None
+'#Date                  : 9-June-2020
+'#Author(s)             : VAM
+'###########################################################################################################################################
+
+Public Sub DragElement()
+ url = "https://www.peoples.com/personal/checking"
+ Browsers.Item(btIExplorer).Run(url)
+ Set objPage = Sys.Browser().objPage("*")
+ objPage.Drag 30, 40, 50, 0
+ End Sub
+ 

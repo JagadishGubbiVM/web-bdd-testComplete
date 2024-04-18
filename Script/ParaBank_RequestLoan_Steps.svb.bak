@@ -1,0 +1,32 @@
+﻿'USEUNIT Allocator
+'USEUNIT CommonBusinessFunctions
+'USEUNIT ExcelDataAccess
+'USEUNIT FrameworkParameters
+'USEUNIT ParaBank_RequestLoan_Page
+'USEUNIT TestParameters
+
+
+' [When I navigates to Request Loan]
+Sub I_navigates_to_Request_Loan()
+   Call ParaBank_RequestLoan_Page.ClickLnkRequestLoan() 
+    Delay(2000)
+End Sub
+
+
+' [When I enter Loan information {arg} {arg}]
+Sub I_enter_Loan_information_(LoanAmount, DownPayment)
+  Call ParaBank_RequestLoan_Page.EnterLoan_information(LoanAmount,objTestDataDict.Item(LoanAmount))
+  Call ParaBank_RequestLoan_Page.EnterLoan_information(DownPayment,objTestDataDict.Item(DownPayment))
+End Sub
+
+
+' [When I click on Apply Now]
+Sub I_click_on_Apply_Now()
+  Call ParaBank_RequestLoan_Page.ClickBtnApplyNow()
+End Sub
+
+' [Then I should see Loan Message {arg}]
+Sub I_should_see_Loan_Message_(param1)
+  Call ParaBank_RequestLoan_Page.IsLoanMsgExists() 
+   Delay(2000)
+End Sub

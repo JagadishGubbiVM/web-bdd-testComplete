@@ -1,0 +1,351 @@
+﻿'USEUNIT ErrorConstants
+'USEUNIT TestParameters
+'USEUNIT CommonUtility
+'USEUNIT Allocator
+'USEUNIT CommonBusinessFunctions
+
+'Option Explicit
+
+Private p_strRelativePath
+Private p_strRunSettingPath
+Private p_strDataBasePath
+Private p_strReportFolderName
+Private p_strHtmlReportFolderName
+Private p_strArchiveReportFolderName
+Private p_strMHTReportFolderName
+Private p_strScreenshotsFolderName
+Private p_strScreenshotsDocName
+Private p_strHealthCheckReportFolderName
+
+'###################################################################################################################
+'#Function Description	: Function to create report folder
+'#Input Parameters		 : None
+'#Return Value			  : None
+'#Author					   : VAM
+'#Date Created			  : 15-Apr-2019
+'###################################################################################################################
+Public Sub SetReportFolder()
+ p_strReportFolderName = GetProjectPath & GetReportPath & "Run_" & GetFolderNameByDateAndTime
+ Dim objFolder
+ Dim objFso : Set objFso = CreateObject("Scripting.FileSystemObject")
+	If Not objFso.FolderExists(p_strReportFolderName) Then
+	 Set objFolder = objFso.CreateFolder(p_strReportFolderName)
+	End If
+	Set objFso = Nothing
+End Sub
+
+
+'###################################################################################################################
+'#Function Description	: Function to get report folder during runtime
+'#Input Parameters		 : None
+'#Return Value			  : Report folder path
+'#Author					   : VAM
+'#Date Created			  : 15-Apr-2019
+'###################################################################################################################
+Public Function GetReportFolder()
+ GetReportFolder = p_strReportFolderName
+End Function
+
+'###################################################################################################################
+'#Function Description	: Function to create HTML report folder
+'#Input Parameters		 : None
+'#Return Value			  : None
+'#Author					   : VAM
+'#Date Created			  : 15-Apr-2019
+'###################################################################################################################
+Public Sub SetHtmlReportFolder()
+   p_strHtmlReportFolderName = GetProjectPath & GetReportPath & "HTMLReport" 
+   Dim objFolder
+   Dim objFso : Set objFso = CreateObject("Scripting.FileSystemObject")
+  	If Not objFso.FolderExists(p_strHtmlReportFolderName) Then
+  	 Set objFolder = objFso.CreateFolder(p_strHtmlReportFolderName)
+  	End If
+    Set objFso = Nothing
+  
+   p_strHtmlReportFolderName = p_strHtmlReportFolderName & "\Run_" & GetFolderNameByDateAndTime
+   
+  	Set objFso = CreateObject("Scripting.FileSystemObject")
+  	If Not objFso.FolderExists(p_strHtmlReportFolderName) Then
+  	 Set objFolder = objFso.CreateFolder(p_strHtmlReportFolderName)
+  	End If
+    Set objFso = Nothing
+End Sub
+
+'###################################################################################################################
+'#Function Description	: Function to get html report folder during runtime
+'#Input Parameters		 : None
+'#Return Value			  : Report folder path
+'#Author					   : VAM
+'#Date Created			  : 15-Apr-2019
+'###################################################################################################################
+Public Function GetHtmlReportFolder()
+ GetHtmlReportFolder = p_strHtmlReportFolderName
+End Function
+
+'###################################################################################################################
+'#Function Description	: Function to create Archive report folder
+'#Input Parameters		 : None
+'#Return Value			  : None
+'#Author					   : VAM
+'#Date Created			  : 15-Apr-2019
+'###################################################################################################################
+Public Sub SetArchiveReportFolder()
+ p_strArchiveReportFolderName = GetProjectPath & GetReportPath & "ArchiveReport" 
+ Dim objFolder
+ Dim objFso : Set objFso = CreateObject("Scripting.FileSystemObject")
+	If Not objFso.FolderExists(p_strArchiveReportFolderName) Then
+	 Set objFolder = objFso.CreateFolder(p_strArchiveReportFolderName)
+	End If
+	Set objFso = Nothing
+  
+  p_strArchiveReportFolderName = p_strArchiveReportFolderName & "\Run_" & GetFolderNameByDateAndTime
+  Set objFso = CreateObject("Scripting.FileSystemObject")
+	If Not objFso.FolderExists(p_strArchiveReportFolderName) Then
+	 Set objFolder = objFso.CreateFolder(p_strArchiveReportFolderName)
+	End If
+	Set objFso = Nothing 
+   
+End Sub
+
+'###################################################################################################################
+'#Function Description	: Function to get Archive report folder during runtime
+'#Input Parameters		 : None
+'#Return Value			  : Report folder path
+'#Author					   : VAM
+'#Date Created			  : 15-Apr-2019
+'###################################################################################################################
+Public Function GetArchiveReportFolder()
+ GetArchiveReportFolder = p_strArchiveReportFolderName
+End Function
+
+'###################################################################################################################
+'#Function Description	: Function to create MHT report folder
+'#Input Parameters		 : None
+'#Return Value			  : None
+'#Author					   : VAM
+'#Date Created			  : 15-Apr-2019
+'###################################################################################################################
+Public Sub SetMHTReportFolder()
+
+ p_strMHTReportFolderName = GetProjectPath & GetReportPath & "MHTReport" 
+ Dim objFolder
+ Dim objFso : Set objFso = CreateObject("Scripting.FileSystemObject")
+	If Not objFso.FolderExists(p_strMHTReportFolderName) Then
+	 Set objFolder = objFso.CreateFolder(p_strMHTReportFolderName)
+	End If
+	Set objFso = Nothing
+  
+  p_strMHTReportFolderName = p_strMHTReportFolderName & "\Run_" & GetFolderNameByDateAndTime 
+  Set objFso = CreateObject("Scripting.FileSystemObject")
+	If Not objFso.FolderExists(p_strMHTReportFolderName) Then
+	 Set objFolder = objFso.CreateFolder(p_strMHTReportFolderName)
+	End If
+	Set objFso = Nothing
+  
+End Sub
+
+'###################################################################################################################
+'#Function Description	: Function to get MHT report folder during runtime
+'#Input Parameters		 : None
+'#Return Value			  : Report folder path
+'#Author					   : VAM
+'#Date Created			  : 15-Apr-2019
+'###################################################################################################################
+Public Function GetMHTReportFolder()
+ GetMHTReportFolder = p_strMHTReportFolderName
+End Function
+
+'###################################################################################################################
+'#Function Description	: Function to set project folder path during runtime
+'#Input Parameters		 : None
+'#Return Value			  : None
+'#Author					   : VAM
+'#Date Created			  : 15-Apr-2019
+'###################################################################################################################
+Public Sub SetProjectPath()
+ Dim objFso : Set objFso = CreateObject("Scripting.FileSystemObject")
+ p_strRelativePath = objFso.GetAbsolutePathName(".")
+	Set objFso = Nothing
+	If Not Project.Variables.VariableExists("ProjectPath") Then
+		Project.Variables.AddVariable "ProjectPath", "String"
+	End If
+  Project.Variables.ProjectPath = p_strRelativePath
+End Sub
+
+'###################################################################################################################
+'#Function Description	: Function to get project folder path during runtime
+'#Input Parameters		 : None
+'#Return Value			  : Project folder path
+'#Author					   : VAM
+'#Date Created			  : 15-Apr-2019
+'###################################################################################################################
+Public Function GetProjectPath
+	Dim objFso : Set objFso = CreateObject("Scripting.FileSystemObject")
+	If Not objFso.FolderExists(p_strRelativePath) Then
+		Err.Raise ErrorConstants.E_INVALID_PATH, "FrameworkParameters Library","FrameworkParameters Script Unit: Invalid Project path!"
+	End If
+	Set objFso = Nothing
+	GetProjectPath = p_strRelativePath
+End Function
+
+'###################################################################################################################
+'#Function Description	: Function to set RunSetting.xml file path during runtime
+'#Input Parameters		 : None
+'#Return Value			  : None
+'#Author					   : VAM
+'#Date Created			  : 15-Apr-2019
+'###################################################################################################################
+Public Sub SetRunSettingXmlPath(strPath)
+ p_strRunSettingPath = GetProjectPath() & strPath
+ If Not Project.Variables.VariableExists("RunSettingPath") Then
+		Project.Variables.AddVariable "RunSettingPath", "String"
+	End If
+  Project.Variables.RunSettingPath = p_strRunSettingPath
+End Sub
+
+'###################################################################################################################
+'#Function Description	: Function to Set RunSettings.xml file path during runtime
+'#Input Parameters		 : None
+'#Return Value			  : RunSetting xml file path
+'#Author					   : VAM
+'#Date Created			  : 15-Apr-2019
+'###################################################################################################################
+Public Function GetRunSettingXmlPath()
+ Dim objFso : Set objFso = CreateObject("Scripting.FileSystemObject")
+	If Not objFso.FileExists(p_strRunSettingPath) Then
+		Err.Raise ErrorConstants.E_INVALID_PATH, "FrameworkParameters Library","FrameworkParameters Script Unit: Invalid Run Setting xml file path!"
+	End If
+	Set objFso = Nothing
+	GetRunSettingXmlPath = p_strRunSettingPath
+End Function
+
+'###################################################################################################################
+'#Function Description	: Function to set Excel file as DB path during runtime
+'#Input Parameters		 : None
+'#Return Value			  : None
+'#Author					   : VAM
+'#Date Created			  : 15-Apr-2019
+'###################################################################################################################
+Public Sub SetDatabasePath()
+ Dim strProjectName : strProjectName = Trim(Split(GetProjectName(),"-")(0))
+ p_strDataBasePath = GetProjectPath() & GetDataDirName() & strProjectName
+ If Not Project.Variables.VariableExists("DatabasePath") Then
+		Project.Variables.AddVariable "DatabasePath", "String"
+	End If
+    Project.Variables.DatabasePath = p_strDataBasePath
+End Sub
+
+'###################################################################################################################
+'#Function Description	: Function to get Excel file as DB path during runtime
+'#Input Parameters		 : None
+'#Return Value			  : DB folder path
+'#Author					   : VAM
+'#Date Created			  : 15-Apr-2019
+'###################################################################################################################
+Public Function GetDatabasePath()
+ Dim objFso : Set objFso = CreateObject("Scripting.FileSystemObject")
+	If Not objFso.FolderExists(p_strDataBasePath) Then
+		Err.Raise ErrorConstants.E_INVALID_PATH, "FrameworkParameters Library","FrameworkParameters Script Unit: Invalid Databas folder path!"
+	End If
+	Set objFso = Nothing
+	GetDatabasePath = p_strDataBasePath
+End Function
+
+'###################################################################################################################
+'#Function Description	: Function to create Screeshot word document
+'#Input Parameters		 : None
+'#Return Value			  : None
+'#Author					   : VAM
+'#Date Created			  : 31-Jul-2020
+'###################################################################################################################
+Public Sub SetScreenShotDocument()
+ 'p_strReportFolderName = GetProjectPath & GetReportPath & "Run_" & GetFolderNameByDateAndTime
+ If GetScreenshotInWordFlag = True then
+   p_strScreenshotsFolderName = GetProjectPath & GetReportPath & "ScreenshotDocs" 
+   Dim objFolder
+   Dim objFso : Set objFso = CreateObject("Scripting.FileSystemObject")
+  	If Not objFso.FolderExists(p_strScreenshotsFolderName) Then
+  	 Set objFolder = objFso.CreateFolder(p_strScreenshotsFolderName)
+  	End If
+    Set objFso = Nothing
+  
+    p_strScreenshotsDocName = p_strScreenshotsFolderName & "\" & Project.Variables.scenarioName & "_" & GetFolderNameByDateAndTime &".doc" 
+      Set objFso = CreateObject("Scripting.FileSystemObject")
+    	If Not objFso.FileExists(p_strScreenshotsDocName) Then
+    	 Set objFolder = objFso.CreateTextFile(p_strScreenshotsDocName)
+    	End If
+    	Set objFso = Nothing 
+      
+     If Not Project.Variables.VariableExists("screenshotLogger") Then
+      Project.Variables.AddVariable "screenshotLogger", "Boolean"
+     End If
+     Project.Variables.screenshotLogger = True
+ Else
+    If Not Project.Variables.VariableExists("screenshotLogger") Then
+      Project.Variables.AddVariable "screenshotLogger", "Boolean"
+    End If 
+    Project.Variables.screenshotLogger = False 
+ End If   
+    
+End Sub
+
+Public Function GetScreenshotFolderPath()
+ GetScreenshotFolderPath = p_strScreenshotsFolderName
+End Function
+
+Public Function GetScreenshotDocPath()
+ GetScreenshotDocPath = p_strScreenshotsDocName
+End Function
+
+'###################################################################################################################
+'#Function Description	: Function to create HTML report folder
+'#Input Parameters		 : None
+'#Return Value			  : None
+'#Author					   : VAM
+'#Date Created			  : 15-Apr-2019
+'###################################################################################################################
+Public Sub SetHealthCheckReportFolder()
+   p_strHealthCheckReportFolderName = GetProjectPath & GetReportPath & "HealthCheckReport" 
+   Dim objFolder
+   Dim objFso : Set objFso = CreateObject("Scripting.FileSystemObject")
+  	If Not objFso.FolderExists(p_strHealthCheckReportFolderName) Then
+  	 Set objFolder = objFso.CreateFolder(p_strHealthCheckReportFolderName)
+  	End If
+    Set objFso = Nothing
+  
+   p_strHealthCheckReportFolderName = p_strHealthCheckReportFolderName & "\Run_" & GetFolderNameByDateAndTime
+   
+  	Set objFso = CreateObject("Scripting.FileSystemObject")
+  	If Not objFso.FolderExists(p_strHealthCheckReportFolderName) Then
+  	 Set objFolder = objFso.CreateFolder(p_strHealthCheckReportFolderName)
+  	End If
+    
+    CommonBusinessFunctions.HealthCheckVariablesFile
+    
+    If Not Project.Variables.VariableExists("sitAppId") Then
+  		  Project.Variables.AddVariable "sitAppId", "String"
+  	End If
+  
+   	If Not Project.Variables.VariableExists("uatAppId") Then
+  		  Project.Variables.AddVariable "uatAppId", "String"
+  	End If
+   	If Not Project.Variables.VariableExists("sitExistCustAppId") Then
+  		  Project.Variables.AddVariable "sitExistCustAppId", "String"
+  	End If
+  
+   	If Not Project.Variables.VariableExists("uatExistCustAppId") Then
+  		  Project.Variables.AddVariable "uatExistCustAppId", "String"
+  	End If
+    
+    Project.Variables.sitAppId = Empty
+    Project.Variables.uatAppId = Empty
+    Project.Variables.sitExistCustAppId = Empty
+    Project.Variables.uatExistCustAppId = Empty
+    
+    Set objFso = Nothing
+End Sub
+
+Public Function GetHealthCheckFolderPath()
+ GetHealthCheckFolderPath = p_strHealthCheckReportFolderName
+End Function
+

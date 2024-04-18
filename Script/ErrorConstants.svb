@@ -1,0 +1,9 @@
+﻿Option Explicit
+
+Public Const E_ELEMENT_NOT_FOUND = 2001
+Public Const E_INVALID_LOCATOR = 2002
+
+Public Const E_INVALID_PATH = 3001
+Public Const E_BLANK_RUN_CONFIG = 4003
+Public Const E_DB_PATH_NOT_EXIST = 5001
+Public Const E_DB_NOT_CONNECTED = 5003

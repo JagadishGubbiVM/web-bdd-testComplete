@@ -1,0 +1,41 @@
+﻿'USEUNIT CommonPage
+'USEUNIT ExcelDataAccess
+'USEUNIT BrowserActions
+'USEUNIT Allocator
+'USEUNIT TestParameters
+'USEUNIT FrameworkParameters
+'USEUNIT CommonBusinessFunctions
+'USEUNIT ReportLogger
+
+
+
+' [When User navigated to ParaBank Application]
+Sub User_navigated_to_parabank_Application()
+  LoadTestParameters
+  Call NavigateToURL(GetEnvironment)
+End Sub
+
+' [Given I Fetch single row from table {arg} where scenario id {arg} and data id {arg}]
+Sub Fetch_single_row_from_where_scenario_id_and_data_id_(tableName, scenarioID, dataSetID)
+Call ExcelDataAccess.GetTestDataByDataSetID(tableName,scenarioID,dataSetID)
+End Sub
+
+' [Given I Fetch single row from table {arg} where testcase id {arg}]
+Sub Fetch_single_row_from_table_where_testcase_id(tableName, testCaseID)
+Call ExcelDataAccess.GetTestDataByTestCaseID(tableName,testCaseID)
+End Sub
+
+' [Given I Fetch all rows from table {arg} where feature id {arg}]
+Sub I_Fetch_all_rows_from_where_feature_id_(tableName, featureID)
+Call ExcelDataAccess.GetTestDataByFeatureID(tableName,featureID)
+End Sub
+
+' [Given I Fetch single row from sheet {arg} where scenario id {arg} and data id {arg}]
+Sub I_Fetch_single_row_from_sheet_where_scenario_id_and_data_id_(wrkshtname, scenarioID, dataSetID)
+Call ExcelDataAccess.GetTestDataByTestDataID(wrkshtname,scenarioID, dataSetID)
+End Sub
+
+' [Given I Fetch single row from sheet {arg} where user story id {arg} and test case id {arg}]
+Sub I_Fetch_single_row_from_sheet_where_user_story_id_and_test_case_id_(wrkshtname, scenarioID, dataSetID)
+Call ExcelDataAccess.GetTestDataByTestDataID(wrkshtname,scenarioID, dataSetID)
+End Sub

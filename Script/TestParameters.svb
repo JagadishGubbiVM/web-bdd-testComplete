@@ -1,0 +1,98 @@
+﻿'USEUNIT Allocator
+'USEUNIT XmlDataAccess
+
+Option Explicit
+
+Private objDataDict
+
+Public Sub LoadTestParameters()
+ Set objDataDict = XmlDataAccess.GetAllValues()
+End Sub
+
+Public Function GetEnvironment()
+ GetEnvironment = objDataDict.Item("EnvironmentName")
+End Function
+
+Public Function GetEnvironmentUrl()
+ GetEnvironmentUrl = objDataDict.Item("EnvironmentURL")
+End Function
+
+Public Function GetProjectName()
+ GetProjectName = objDataDict.Item("ProjectName")
+End Function
+
+Public Function GetProcessToClose()
+ GetProcessToClose = objDataDict.Item("ProcessToClose")
+End Function
+
+Public Function GetDataBaseName()
+ GetDataBaseName = objDataDict.Item("DataBaseName")
+End Function
+
+Public Function GetDataDirName()
+ GetDataDirName = objDataDict.Item("DataDir")
+End Function
+
+Public Function GetRunType()
+ GetRunType = objDataDict.Item("RunType")
+End Function
+
+Public Function GetRunPlatform()
+ GetRunPlatform = objDataDict.Item("RunPlatform")
+End Function
+
+Public Function GetDefaultBrowser()
+ GetDefaultBrowser = objDataDict.Item("DefaultBrowser")
+End Function
+
+Public Function GetBrowserName()
+ If IsNull(objDataDict.Item("Browser")) Then
+  GetBrowserName = GetDefaultBrowser
+ Else
+  GetBrowserName = objDataDict.Item("Browser")
+ End If
+End Function
+
+Public Function GetExecutionTags()
+ GetExecutionTags = objDataDict.Item("ExecutionTags")
+End Function
+
+Public Function GetBrowserSyncMaxTimeout()
+ GetBrowserSyncMaxTimeout = CInt(objDataDict.Item("BrowserSyncMaxTimeout")) * 1000
+End Function
+
+Public Function GetWebElementSyncMaxTimeout()
+ GetWebElementSyncMaxTimeout = CInt(objDataDict.Item("ElementSyncMaxTimeout")) * 1000
+End Function
+
+Public Function GetReportPath()
+ GetReportPath = objDataDict.Item("ReportPath")
+End Function
+
+Public Function GetPassScreeshotFlag()
+ GetPassScreeshotFlag = CBool(objDataDict.Item("TakeScreenshotPassedStep"))
+End Function
+
+Public Function GetFailScreeshotFlag()
+ GetFailScreeshotFlag = CBool(objDataDict.Item("TakeScreenshotFailedStep"))
+End Function
+
+Public Function GetHtmlReportFlag()
+ GetHtmlReportFlag = CBool(objDataDict.Item("HtmlReport"))
+End Function
+
+Public Function GetHealthCheckFlag()
+ GetHealthCheckFlag = CBool(objDataDict.Item("HealthCheck"))
+End Function
+
+Public Function GetMhtReportFlag()
+ GetMhtReportFlag = CBool(objDataDict.Item("MHTReport"))
+End Function
+
+Public Function GetArchiveReportsFlag()
+ GetArchiveReportsFlag = CBool(objDataDict.Item("ArchiveReports"))
+End Function
+
+Public Function GetScreenshotInWordFlag()
+ GetScreenshotInWordFlag = CBool(objDataDict.Item("ConsolidateScreenshotsInWordDoc"))
+End Function

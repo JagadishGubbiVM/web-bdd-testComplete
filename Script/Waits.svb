@@ -1,0 +1,18 @@
+﻿'USEUNIT Allocator
+
+Public Sub WaitForElement()
+ GetPage().Wait(elementTimeOut)
+End Sub
+
+Public Sub WaitForPageLoad()
+ Dim i,state
+ For i = 0 To 8
+ state = contentDocument.readyState
+ If Not state = "complete" Then
+  objPage.Wait(1000)
+ Else
+   Exit For
+  End If
+ Next
+End Sub
+

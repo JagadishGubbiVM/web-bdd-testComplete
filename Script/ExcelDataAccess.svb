@@ -1,0 +1,369 @@
+﻿'USEUNIT CommonUtility
+'USEUNIT ErrorConstants
+'USEUNIT FrameworkParameters
+'USEUNIT QueryConstants
+'USEUNIT TestConstants
+'USEUNIT TestParameters
+
+Option Explicit	'Forcing Variable declarations
+
+Private p_strDatabasePath
+Private p_strDatabaseName
+Private p_objConn, p_objConnState
+
+Public objTestDataDict
+Public objmultiTestDataDict
+
+
+'###################################################################################################################
+'#Function Description	: Function to establish connection to excel
+'#Input Parameters		 : None
+'#Return Value			  : None
+'#Author					   : VAM
+'#Date Created			  : 15-Apr-2019
+'###################################################################################################################
+Public Sub DBConnect()
+	Dim objFso
+ 
+ If Not IsDBConnectionActive() Then 
+'  p_strDatabasePath = FrameworkParameters.GetDatabasePath()
+'   Set objFso = CreateObject("Scripting.FileSystemObject")
+ 
+' 	If Not objFso.FolderExists(p_strDatabasePath) Then
+' 		Err.Raise ErrorConstants.E_DB_PATH_NOT_EXIST, "Data Access Library", "ExcelDataAccess Script Unit: The given database path does not exist!"
+' 	End If
+' 	Set objFso = Nothing
+'		
+' 	If p_strDatabaseName = "" Then
+' 		Err.Raise ErrorConstants.E_DB_NOT_CONNECTED, "Data Access Library", "ExcelDataAccess Script Unit: The database name cannot be blank!"
+' 	End If
+	
+ 	Dim strFilePath, strConnectionString
+  
+  If(TestParameters.GetDataBaseName = "Excel") Then
+ 	  strFilePath = p_strDatabasePath & "\" & p_strDatabaseName & ".xlsm"
+ 	  strConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & strFilePath &_
+ 																";Extended Properties='Excel 12.0 Xml;HDR=Yes;IMEX=2'"
+  ElseIf(TestParameters.GetDataBaseName = "SQL Server") Then
+    strConnectionString= "Provider=sqloledb;Data Source=bpt-tstmiscsq16;Initial Catalog=quautomation;Integrated Security=SSPI"
+    '"Provider=SQLOLEDB;server=bpt-tstmiscsq16;database=quautomation;uid=[insertuser];pwd=[insertpassword]"
+  End If
+		
+ 	Set p_objConn = CreateObject("ADODB.Connection")
+ 	p_objConn.Open strConnectionString
+  p_objConnState = p_objConn.State
+ End If
+End Sub
+
+'###################################################################################################################
+'#Function Description	: Function to execute query
+'#Input Parameters		  : strQuery
+'#Return Value			    : None
+'#Author					      : VAM
+'#Date Created			    : 02-Apr-2020
+'###################################################################################################################
+Public Function ExecuteQuery(strQuery)
+	CheckConnection()
+	Dim objCommand: Set objCommand = CreateObject("ADODB.Command")
+	objCommand.ActiveConnection = p_objConn
+	objCommand.CommandText = strQuery
+	
+	Dim objRecordSet: Set objRecordSet = CreateObject("ADODB.Recordset")
+	objRecordSet.CursorLocation = 3
+	objRecordSet.Open objCommand
+	
+	Set ExecuteQuery = objRecordSet
+	
+	Set objRecordSet.ActiveConnection = Nothing
+	Set objRecordSet = Nothing
+	Set objCommand = Nothing
+End Function
+
+'###################################################################################################################
+'#Function Description	: Function to set database file excel name
+'#Input Parameters		 : strDatabaseName
+'#Return Value			  : None
+'#Author					   : VAM
+'#Date Created			  : 02-Apr-2020
+'###################################################################################################################
+Public Sub SetDatabaseName(strDatabaseName)
+	p_strDatabaseName = strDatabaseName
+End Sub
+
+'###################################################################################################################
+'#Function Description	: Function to check Db Connection is active or not
+'#Input Parameters		 : None
+'#Return Value			  : None
+'#Author					   : VAM
+'#Date Created			  : 02-Apr-2020
+'###################################################################################################################
+Private Sub CheckConnection()
+	If IsEmpty(p_objConn) And (p_objConnState = 0) Then
+		Err.Raise ErrorConstants.E_DB_NOT_CONNECTED, "Data Access Library","ExcelDataAccess Script Unit: Database not connected!"
+	End If
+End Sub
+
+'###################################################################################################################
+'#Function Description	: Function to check Db Connection is active or not by using connection state
+'#Input Parameters		 : None
+'#Return Value			  : None
+'#Author					   : VAM
+'#Date Created			  : 02-Apr-2020
+'###################################################################################################################
+Private Function IsDBConnectionActive()
+  If p_objConnState = 1 Then
+		IsDBConnectionActive = True
+  ElseIf p_objConnState = 0 Then
+    IsDBConnectionActive = False
+  Else
+    IsDBConnectionActive = False
+	End If
+End Function
+	
+'###################################################################################################################
+'#Function Description	 : Function to disconnect from excel DB
+'#Input Parameters		  : None
+'#Return Value			   : None
+'#Author					    : VAM
+'#Date Created			   : 02-Apr-2020
+'###################################################################################################################
+Public Sub DBDisconnect()
+ If p_objConnState = 1 Then 
+  p_objConn.Close
+  p_objConnState = 0
+ End If
+End Sub
+
+'###################################################################################################################
+'#Function Description	  : Function to get test from db by using scenario and data id
+'#Input Parameters		    : db tablename, scenarioId and datasetId
+'#Return Value			      : None
+'#Author					        : VAM
+'#Date Created			      : 02-Apr-2020
+'###################################################################################################################
+Public Function GetTestDataByDataSetID(strTableName,strScenarioId,strDataSetId)
+ Dim strQuery, strDBFileName
+ Dim objDataSetRecordSet, intRecordCount, intCounter
+ Dim key, item
+ 
+ Set objTestDataDict = CreateObject("Scripting.Dictionary")
+ strDBFileName = Split(strTableName,"_")(0)
+ 
+ SetDatabaseName(strDBFileName)
+ DBConnect()
+ strQuery = Replace(Replace(QueryConstants.Q_DATASET_DATA,"[table_name]",strTableName),"scenario_id",strScenarioId)
+ strQuery = Replace(strQuery,"data_id",strDataSetId)
+ 
+ Set objDataSetRecordSet = ExecuteQuery(strQuery)
+ intRecordCount = objDataSetRecordSet.Fields.Count
+ If intRecordCount <> 0 Then
+  For intCounter = 0 To intRecordCount - 1
+   key = objDataSetRecordSet.Fields(intCounter).Name
+   item = objDataSetRecordSet.Fields(key).Value
+   objTestDataDict.add key,item
+  Next
+ End If
+
+ DBDisconnect()
+ Set objDataSetRecordSet = Nothing
+End Function
+
+'###################################################################################################################
+'#Function Description	  : Function to get test from db by using scenario and data id
+'#Input Parameters		    : db tablename, scenarioId and datasetId
+'#Return Value			      : None
+'#Author					        : VAM
+'#Date Created			      : 02-Apr-2020
+'###################################################################################################################
+Public Function GetTestDataByTestCaseID(strTableName,strTestCaseID)
+ Dim strQuery, strDBFileName
+ Dim objDataSetRecordSet, intRecordCount, intCounter
+ Dim key, item
+ 
+ Set objTestDataDict = CreateObject("Scripting.Dictionary")
+ strDBFileName = Split(strTableName,"_")(0)
+ 
+ SetDatabaseName(strDBFileName)
+ DBConnect()
+ strQuery = Replace(Replace(QueryConstants.Q_FUN_TCS_DATA,"table_name",strTableName),"fn_tc_id",strTestCaseID)
+ 
+ Set objDataSetRecordSet = ExecuteQuery(strQuery)
+ intRecordCount = objDataSetRecordSet.Fields.Count
+ If intRecordCount <> 0 Then
+  For intCounter = 0 To intRecordCount - 1
+   key = objDataSetRecordSet.Fields(intCounter).Name
+   item = objDataSetRecordSet.Fields(key).Value
+   objTestDataDict.add key,item
+  Next
+ End If
+
+ DBDisconnect()
+ Set objDataSetRecordSet = Nothing
+End Function
+
+'###################################################################################################################
+'#Function Description	  : Function to get test from db by using bdd feature id
+'#Input Parameters		    : db tablename, featureId
+'#Return Value			      : None
+'#Author					        : VAM
+'#Date Created			      : 02-Apr-2020
+'###################################################################################################################
+Public Function GetTestDataByFeatureID(strTableName,strFeatureId)
+ ' /** This method code is not complete donot use 
+ Dim strQuery, strDBFileName
+ Dim objDataSetRecordSet, intRecordCount, intCounter, intColumnCount
+ Dim key, item
+ Dim arrTestData()
+ 
+ Set objMultiTestDataDict = CreateObject("Scripting.Dictionary")
+ strDBFileName = Split(strTableName,"_")(0)
+ 
+ SetDatabaseName(strDBFileName)
+ DBConnect()
+
+ strQuery = Replace(Replace(QueryConstants.Q_FEATURE_DATA,"table_name",strTableName),"feature_id",strFeatureId)
+
+ Set objDataSetRecordSet = ExecuteQuery(strQuery)
+ 
+ intRecordCount = objDataSetRecordSet.RecordCount
+ intColumnCount = objDataSetRecordSet.Fields.Count
+ 
+ If intRecordCount <> 0 Then
+  For intCounter = 0 To intRecordCount - 1
+   key = objDataSetRecordSet.Fields(intCounter).Name
+   ReDim arrTestData(intRecordCount)
+   For i = 0 To intRecordCount -1
+    arrTestData(i) = objDataSetRecordSet.Fields.Item(i).Value
+   Next
+   objMultiTestDataDict.add key,arrTestData
+  Next
+ End If
+
+ DBDisconnect()
+ Set objDataSetRecordSet = Nothing
+End Function
+
+'###################################################################################################################
+'#Function Description	 : Function to empty test data dictionary
+'#Input Parameters		  : None
+'#Return Value			   : None
+'#Author					    : VAM
+'#Date Created			  : 02-Apr-2020
+'###################################################################################################################
+Public Sub TearDownDataDictionaries()
+ Set objTestDataDict = Nothing
+End Sub
+
+'###################################################################################################################
+'#Function Description	 : Function to connect to the Database using ADO Connection
+'#Input Parameters		  : None
+'#Return Value			   : Results
+'#Author					    : VAM
+'#Date Created			 : 10-June-2020
+'###################################################################################################################
+Sub ADOConnect
+  Set objConnection = ADO.CreateConnection
+  objConnection.ConnectionString = "Provider=Microsoft.Jet.OLEDB.4.0;" & _
+                  "Data Source=C:\Users\Public\Documents\TestComplete 14 Samples\Desktop\Checkpoints\XML\DataGridViewSample\OrdersDB.mdb"
+  objConnection.Open
+  Set objRecSet = objConnection.Execute("SELECT * FROM orders WHERE [quant] > 1")
+  Log.AppendFolder("Customers who bought more than one product")
+  objRecSet.MoveFirst
+  While Not objRecSet.EOF
+    Log.Message objRecSet.Fields("name").Value
+    objRecSet.MoveNext
+  Wend
+  objConnection.Close
+End Sub
+
+'###################################################################################################################
+'#Function Description	  : Function to update SSN and checking account number at db
+'#Input Parameters		    : db tablename, testCaseName and regionCode
+'#Return Value			      : None
+'#Author					        : VAM
+'#Date Created			      : 02-Apr-2020
+'###################################################################################################################
+Public Function UpdateSsnAndCheckingAccount(strTableName,strSsnSequence)
+ Dim strQuery, strDBFileName
+ Dim objDataSetRecordSet, intRecordCount, intCounter
+ Dim key, item
+ 
+ strDBFileName = Split(strTableName,"_")(0)
+ SetDatabaseName(strDBFileName)
+ DBConnect()
+ 
+ strQuery = Replace(Replace(QueryConstants.Q_FUN_UPDATE_SSN,"[table_name]",strTableName),"ssnSequence",strSsnSequence)
+ Set objDataSetRecordSet = ExecuteQuery(strQuery)
+
+ DBDisconnect()
+ Set objDataSetRecordSet = Nothing
+End Function
+
+'###################################################################################################################
+'#Function Description	  : Function to update checking account number at db
+'#Input Parameters		    : db tablename, testCaseName and regionCode
+'#Return Value			      : None
+'#Author					        : VAM
+'#Date Created			      : 02-Apr-2020
+'###################################################################################################################
+Public Function UpdateCheckingAccount(strTableName,strAccountSequence)
+ Dim strQuery, strDBFileName
+ Dim objDataSetRecordSet, intRecordCount, intCounter
+ Dim key, item
+ 
+
+ strDBFileName = Split(strTableName,"_")(0)
+ 
+ SetDatabaseName(strDBFileName)
+ DBConnect()
+ strQuery = Replace(Replace(QueryConstants.Q_FUN_UPDATE_ACCOUNT,"[table_name]",strTableName),"account_sequence",strAccountSequence)
+ Set objDataSetRecordSet = ExecuteQuery(strQuery)
+
+ DBDisconnect()
+ Set objDataSetRecordSet = Nothing
+End Function
+
+
+'###################################################################################################################
+'#Function Description	: Function to Read Excel for Test data and data will be stored in Dictionary object(i.e key and value)
+'#Input Parameters		  : strQuery
+'#Return Value			    : None
+'#Author					      : VAM
+'#Date Created			    : 17-July-2022
+'###################################################################################################################
+
+Function GetTestDataByTestDataID(wrkshtname,strScenarioId,strDataSetId)
+On Error Resume Next
+  Dim Excel, RowCount, ColumnCount, i, j, k ,ExlTestData, objExcelbook, objExcelsheet, dictKey,dictVal
+  Dim dictScenarioIdKey, dictScenarioIdVal, dictTestDataIdKey, dictTestDataIdVal
+  ExlTestData = FrameworkParameters.GetProjectPath() & "\01_Test_Data\Demo_TestData.xlsx"
+  Set Excel = createobject("Excel.Application")
+  Set objExcelbook = Excel.Workbooks.Open(ExlTestData)
+  Set objExcelsheet = objExcelbook.Worksheets(wrkshtname)
+  RowCount = objExcelsheet.UsedRange.Rows.Count
+  ColumnCount = objExcelsheet.UsedRange.Columns.Count
+  Set objTestDataDict = Createobject("Scripting.dictionary")  
+  For i= 2 to RowCount
+    For j= 1 to ColumnCount
+     dictScenarioIdKey = Trim(objExcelsheet.Cells(1,j))  
+     dictScenarioIdVal = Trim(objExcelsheet.Cells(i,j))
+     dictTestDataIdKey = Trim(objExcelsheet.Cells(1,j+1))  
+     dictTestDataIdVal = Trim(objExcelsheet.Cells(i,j+1))
+     if (strScenarioId=dictScenarioIdVal and strDataSetId=dictTestDataIdVal) then
+         For k= 1 to ColumnCount
+         dictKey = Trim(objExcelsheet.Cells(1,k))  
+         dictVal = Trim(objExcelsheet.Cells(i,k))  
+         objTestDataDict.Add dictKey,dictVal 
+         Next
+         Exit For
+     End If 
+    Next
+  Next
+ Set OrangeHRMTestdata = objTestDataDict
+ Excel.Quit
+ Set objExcelsheet = Nothing
+ Set objExcelbook =Nothing
+ Set Excel = Nothing
+On Error GoTo 0
+End Function
+

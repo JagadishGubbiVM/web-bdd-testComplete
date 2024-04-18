@@ -1,0 +1,38 @@
+﻿'USEUNIT WebElementFinder
+'USEUNIT WebActions
+'USEUNIT Allocator
+'USEUNIT ReportLogger
+
+
+Public Sub PageExistanceLog(flag,pageName)
+ If(flag) Then
+  LogMessageWithImage "Successfully navigated to " & pageName & " page."
+ Else
+  LogError "Unable to navigate to " & pageName & " page."
+ End If
+End Sub
+
+
+Function testing()
+  Set objPage= Sys.Browser("edge").Page("*")
+'  dim sam,finalObj
+'  Set sam = Sys.Browser("*").Page("*")
+'  'pageFlag = IsElementExist(FindPageChildElementByXPath(sam,po_lblLetsGetStarted))
+'  'msgbox pageFlag
+'  'Set obj = page.FindChildByXPath("//button[@type='submit']", True) //*[contains(@aria-label, 'Started!')]"
+'  Set finalObj =  sam.FindChildByXPath("//*[contains(@aria-label, 'Started!')]")
+'  If Not finalObj is Nothing Then
+'  'If finalObj.Exists Then
+'  msgbox "here"
+'  Else
+'  msgbox "no"
+'  End If
+ If IsElementExist(FindElement(objPage,po_lblPrimaryResponsibleParty)) Then
+  LogMessage "(Primarily Responsible Party) label displayed in current page."
+ Else
+  LogErrorWithImage "(Primarily Responsible Party) label is not displayed or it is not exist in current page."
+ End If
+End Function
+
+
+

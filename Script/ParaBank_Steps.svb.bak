@@ -1,0 +1,128 @@
+﻿'USEUNIT Allocator
+'USEUNIT TestParameters
+'USEUNIT FrameworkParameters
+'USEUNIT CommonBusinessFunctions
+'USEUNIT ExcelDataAccess
+'USEUNIT ParaBank_LoginPage
+
+
+' [When User enters ParaBank user id as {arg} and password {arg} and Click on Login]
+Sub User_enters_ParaBank_user_id_as_and_password_and_Click_on_Login(dbStrUserId,dbStrPassword)
+  Call ParaBank_LoginPage.EnterUserId(objTestDataDict.Item(dbStrUserId))
+  Call ParaBank_LoginPage.EnterPassword(objTestDataDict.Item(dbStrPassword))
+  Call ParaBank_LoginPage.ClickLogInButton()
+  Delay(3000)
+End Sub
+
+' [Then User lands on ParaBank Home page]
+Sub User_lands_on_ParaBank_Home_page()
+    Call ParaBank_LoginPage.IsHomePageExists()
+End Sub
+
+' [Then User clicks on ParaBank Signout to signed out successfully]
+Sub User_clicks_on_ParaBank_Signout_to_signed_out_successfully()
+  Call ParaBank_LoginPage.ClickSignOut()
+ End Sub
+ 
+' [When User navigates to Open New Account]
+Sub User_navigates_to_Open_New_Account()
+   Call ParaBank_LoginPage.ClickLnkOpenNewAccount()
+   Delay(3000)
+End Sub
+
+' [When User selects the type of account {arg}]
+Sub User_selects_the_type_of_account_(AccountType)
+    Call ParaBank_LoginPage.SelectAccountType(AccountType)
+End Sub
+
+' [When User click on Open New Account]
+Sub User_click_on_Open_New_Account()
+   Call ParaBank_LoginPage.ClickBtnOpenNewAccount()
+    Delay(2000)
+End Sub
+
+' [Then User should see {arg} with new account number]
+Sub User_should_see_with_new_account_number(param1)
+  Call ParaBank_LoginPage.IsMsgExists()
+End Sub
+
+' [When User navigates to Transfer Funds]
+Sub User_navigates_to_Transfer_Funds()
+    Call ParaBank_LoginPage.ClickLnkTransferFunds() 
+     Delay(2000)
+End Sub
+
+' [When User Selects {arg} {arg} and {arg}]
+Sub User_Selects_and_(strFrom, strTo, strAmount)
+   Call ParaBank_LoginPage.EnterAmount(objTestDataDict.Item(strAmount))
+   Call ParaBank_LoginPage.SelectAccountNumber(objTestDataDict.Item(strFrom), objTestDataDict.Item(strTo))
+End Sub
+
+' [When User click on Transfer]
+Sub User_click_on_Transfer()
+   Call ParaBank_LoginPage.ClickBtnTransferFunds()
+    Delay(2000)
+End Sub
+
+' [Then User should see {arg}]
+Sub User_should_see_(param1)
+   Call ParaBank_LoginPage.IsTransferMsgExists() 
+End Sub
+
+
+' [When User navigates to Bill Pay]
+Sub User_navigates_to_Bill_Pay()
+ Call ParaBank_LoginPage.ClickLnkBillPay() 
+  Delay(2000)
+End Sub
+
+' [When User enters payee information {arg} {arg} {arg} {arg} {arg} {arg}]
+Sub User_enters_payee_information_(strPayeeName, strAddress, strCity, strState, strZipCode, strPhone)
+   Call ParaBank_LoginPage.Enterpayee_information(strPayeeName,objTestDataDict.Item(strPayeeName))
+   Call ParaBank_LoginPage.Enterpayee_information(strAddress,objTestDataDict.Item(strAddress))
+   Call ParaBank_LoginPage.Enterpayee_information(strCity,objTestDataDict.Item(strCity))
+   Call ParaBank_LoginPage.Enterpayee_information(strState,objTestDataDict.Item(strState))
+   Call ParaBank_LoginPage.Enterpayee_information(strZipCode,objTestDataDict.Item(strZipCode))
+   Call ParaBank_LoginPage.Enterpayee_information(strPhone,objTestDataDict.Item(strPhone))
+End Sub
+
+' [When User enters account information {arg} {arg} {arg}]
+Sub User_enters_account_information_(AccountNumber, VerifyAccount, Amount)
+  Call ParaBank_LoginPage.EnterAccount_information(AccountNumber,objTestDataDict.Item(AccountNumber))
+  Call ParaBank_LoginPage.EnterAccount_information(VerifyAccount,objTestDataDict.Item(VerifyAccount))
+  Call ParaBank_LoginPage.EnterAccount_information(Amount,objTestDataDict.Item(Amount))
+End Sub
+
+' [When User click on Send Payment]
+Sub User_click_on_Send_Payment()
+   Call ParaBank_LoginPage.ClickBtnSendPayments()
+    Delay(2000)
+End Sub
+
+' [Then User should see Payment Message {arg}]
+Sub User_should_see_Payment_Message_(param1)
+  Call ParaBank_LoginPage.IsPaymentMsgExists() 
+End Sub
+
+' [When User enters Loan information {arg} {arg}]
+Sub User_enters_Loan_information_(LoanAmount, DownPayment)
+  Call ParaBank_LoginPage.EnterLoan_information(LoanAmount,objTestDataDict.Item(LoanAmount))
+  Call ParaBank_LoginPage.EnterLoan_information(DownPayment,objTestDataDict.Item(DownPayment))
+End Sub
+
+' [When User click on Apply Now]
+Sub User_click_on_Apply_Now()
+  Call ParaBank_LoginPage.ClickBtnApplyNow()
+End Sub
+
+' [Then User should see Loan Message {arg}]
+Sub User_should_see_Loan_Message_(param1)
+  Call ParaBank_LoginPage.IsLoanMsgExists() 
+   Delay(2000)
+End Sub
+
+' [When User navigates to Request Loan]
+Sub User_navigates_to_Request_Loan()
+   Call ParaBank_LoginPage.ClickLnkRequestLoan() 
+    Delay(2000)
+End Sub

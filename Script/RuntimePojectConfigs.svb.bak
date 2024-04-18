@@ -1,0 +1,13 @@
+﻿
+Public Sub SetRuntimeProjectConfigs()
+  SetWebPageLoadingTimeout TestParameters.browserSyncMaxTime
+  setObjectSearchStrategy
+End Sub
+
+Public Sub SetWebPageLoadingTimeout(timeout)
+   Options.Web.WebPageLoadingTimeout = CInt(timeout * 1000)
+End Sub
+
+Public Sub SetObjectSearchStrategy()
+  Options.Run.ObjectSearchStrategy = Consts.searchBreadthFirst
+End Sub

@@ -1,0 +1,50 @@
+﻿'This script will be used for running TC by using COM
+
+
+''#####################################################################################################################
+''#Script Description		: Initialization Script for batch execution of testcases
+''#Test Tool/Version		  : Test Complete 14+
+''#Test Tool Settings		: N.A.
+''#Application Automated	: N.A.
+''#Author					      : VAM
+''#Date Created			    : 02-Apr-2020
+''#####################################################################################################################
+''Option Explicit	'Forcing Variable declarations
+'
+''Associate required libraries
+'Dim gobjFso, gobjMyFile
+'Dim gstrRelativePath
+'
+'Set gobjFso = CreateObject("Scripting.FileSystemObject")
+'gstrRelativePath = gobjFso.GetParentFolderName(WScript.ScriptFullName)
+'
+'Set gobjMyFile = gobjFso.OpenTextFile(gstrRelativePath & "\Allocator\Allocator.vbs", 1) ' 1 - For Reading
+'Execute gobjMyFile.ReadAll()
+'
+'Set gobjMyFile = Nothing
+'Set gobjFso = Nothing
+'
+''Execute the test batch
+'On Error Resume Next
+'ExecuteTestBatch()
+'If Err.Number <> 0 Then
+'	WScript.Echo Err.Description
+'	WScript.Quit Err.Number
+'End If
+'
+''#######################################################################################################################
+''Function Description	: Function to execute the test batch
+''Input Parameters		  : None
+''Return Value			    : None
+''Author					      : VAM
+''Date Created			    : 02-Apr-2020
+''#######################################################################################################################
+'Sub ExecuteTestBatch()
+'	gobjAllocator.LaunchQtp()
+'	gobjAllocator.SetQtpOptions()
+'	gobjAllocator.SetRelativePath()
+'	gobjAllocator.InitializeTestBatch()
+'	gobjAllocator.InitializeSummaryReport()
+'	gobjAllocator.DriveBatchExecution()
+'	gobjAllocator.WrapUp()
+'End Sub

@@ -1,0 +1,4 @@
+﻿Option Explicit
+
+Public Const T_NEW_CUSTOMER = "New Customer"
+Public Const T_EXISTING_CUSTOMER = "Existing Customer"

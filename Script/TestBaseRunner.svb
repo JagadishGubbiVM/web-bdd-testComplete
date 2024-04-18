@@ -1,0 +1,75 @@
+﻿'USEUNIT Allocator
+'USEUNIT BrowserActions
+'USEUNIT ReportLogger
+'USEUNIT ReportingFunctions
+'USEUNIT ExcelDataAccess
+'USEUNIT TestParameters
+'USEUNIT FrameworkParameters
+'USEUNIT CommonBusinessFunctions
+
+'######################################################################################################################################
+'#Script Name        : TestBaseRunner
+'#Script Description : Bdd test base
+'#Date               : 15-Aug-2019
+'#Author(s)          : VAM
+'#######################################################################################################################################
+Option Explicit
+
+' [BeforeFeature]
+Sub BeforeFeature(feature)
+ Allocator.OnExecutionStart
+ Call LogMessage("Started Feature: [" + feature.Name + "]")
+End Sub
+
+' [BeforeScenario]
+Sub BeforeScenario(scenario)
+  Allocator.OnExecutionStart
+  Call LogMessage("Started Scenario: [" + scenario.Name + "]")
+ 	If Not Project.Variables.VariableExists("scenarioName") Then
+		  Project.Variables.AddVariable "scenarioName", "String"
+	End If
+  Project.Variables.scenarioName = scenario.Name
+ 'Allocator.NavigateToURL
+End Sub
+
+' [AfterScenario]
+Sub AfterScenario(scenario)
+ BrowserActions.CloseBrowser
+ ExcelDataAccess.TearDownDataDictionaries
+ 
+ If GetMhtReportFlag = True then
+  exportMHTLog
+ End If
+ If GetHtmlReportFlag = True then
+  ExportHTMLog
+ End If
+ If GetArchiveReportsFlag = True then
+  ExportHTMLogAsZip
+ End If 
+ 'comments before full execution
+' If GetHealthCheckFlag = True Then
+'    CommonBusinessFunctions.HealthCheckHTML
+'    CommonBusinessFunctions.SendEmailFromOutlook
+'  End If
+ 
+ Call LogMessage("Finished Scenario: [" + scenario.Name + "]")
+End Sub
+
+' [AfterFeature]
+Sub AfterFeature(feature)
+  If GetHealthCheckFlag = True Then
+    CommonBusinessFunctions.HealthCheckHTML
+    CommonBusinessFunctions.SendEmailFromOutlook
+  End If
+   If GetMhtReportFlag = True then
+  exportMHTLog
+ End If
+ If GetHtmlReportFlag = True then
+  ExportHTMLog
+ End If
+ If GetArchiveReportsFlag = True then
+  ExportHTMLogAsZip
+ End If 
+  CommonBusinessFunctions.TearDownHealthCheckDictionaries
+ Call LogMessage("Finished Feature: [" + feature.Name + "]")
+End Sub

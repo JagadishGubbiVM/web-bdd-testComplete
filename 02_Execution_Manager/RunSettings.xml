@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+	<!-- Environment Settings -->
+	<Environments>
+		<Environment>
+			<ActiveByDefault>true</ActiveByDefault>
+			<EnvironmentName>QA</EnvironmentName>
+			<EnvironmentURL>https://parabank.parasoft.com</EnvironmentURL>
+		</Environment>
+		<Environment>
+			<ActiveByDefault>false</ActiveByDefault>
+			<EnvironmentName>UAT</EnvironmentName>
+			<EnvironmentURL>https://www.demoblaze.com/index.html</EnvironmentURL>
+		</Environment>
+	</Environments>
+	<!-- General Settings -->
+	<Variable>
+		<Name>ProjectName</Name>
+		<Value>Test-Automation</Value>
+	</Variable>
+	<Variable>
+		<Name>ProcessToClose</Name>
+		<Value>outlook,chrome,iexplore,edge</Value>
+	</Variable>
+	<!-- Database settings: Excel or SQL Server-->
+	<Variable>
+		<Name>DataBaseName</Name>
+		<Value>SQL Server</Value>
+	</Variable>
+	<Variable>
+		<Name>DataDir</Name>
+		<Value>\01_Test_Data\</Value>
+	</Variable>
+	<!-- Execution Settings -->
+	<!-- RunType: Value should be local/remote-->
+	<!-- RunPlatform: Value should be web/mobile-->
+	<!-- DefaultBrowser: DONT MODIFY this value-->
+	<!-- Browser:Value should be: chrome/firefox/edge/safari/opera/iexplore -->
+	<!-- BrowserSyncMaxTimeout and ElementSyncMaxTimeout: Provide value in Seconds-->
+	<Variable>
+		<Name>RunType</Name>
+		<Value>local</Value>
+	</Variable>
+	<Variable>
+		<Name>RunPlatform</Name>
+		<Value>web</Value>
+	</Variable>
+	<Variable>
+		<Name>DefaultBrowser</Name>
+		<Value>egde</Value>
+	</Variable>
+	<Variable>
+		<Name>Browser</Name>
+		<Value>chrome</Value>
+	</Variable>
+	<Variable>
+		<Name>ExecutionTags</Name>
+		<Value>Regression</Value>
+	</Variable>
+	<Variable>
+		<Name>BrowserSyncMaxTimeout</Name>
+		<Value>60</Value>
+	</Variable>
+	<Variable>
+		<Name>ElementSyncMaxTimeout</Name>
+		<Value>10</Value>
+	</Variable>
+	<!-- Report Settings -->
+	<Variable>
+		<Name>ReportPath</Name>
+		<Value>\04_Execution_Reports\</Value>
+	</Variable>
+	<Variable>
+		<Name>TakeScreenshotFailedStep</Name>
+		<Value>True</Value>
+	</Variable>
+	<Variable>
+		<Name>TakeScreenshotPassedStep</Name>
+		<Value>True</Value>
+	</Variable>
+	<Variable>
+		<Name>HtmlReport</Name>
+		<Value>True</Value>
+	</Variable>
+	<Variable>
+		<Name>MHTReport</Name>
+		<Value>True</Value>
+	</Variable>
+	<Variable>
+		<Name>ArchiveReports</Name>
+		<Value>False</Value>
+	</Variable>
+	<Variable>
+		<Name>HealthCheck</Name>
+		<Value>False</Value>
+	</Variable>
+	<Variable>
+		<Name>ConsolidateScreenshotsInWordDoc</Name>
+		<Value>False</Value>
+	</Variable>
+	<Variable>
+		<Name>LogLevel</Name>
+		<Value>4</Value>
+	</Variable>
+</Project>

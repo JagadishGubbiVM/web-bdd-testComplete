@@ -1,0 +1,18 @@
+﻿'DB Queries
+'==========
+Option Explicit
+
+Public Const Q_RUN_CONFIG_QUERY = "Select * From [RunConfig$]"
+
+ 
+
+Public Const Q_FEATURE_DATA = "Select * From [table_name$] where bdd_fr_id='feature_id'"
+Public Const Q_SCENARIO_DATA = "Select * From [table_name$] where bdd_sc_id='scenario_id'"
+'Public Const Q_DATASET_DATA = "Select * From [table_name$] where bdd_sc_id='scenario_id' and bdd_data_set_id='data_id'"
+Public Const Q_DATASET_DATA = "Select * From [table_name] where bdd_sc_id='scenario_id' and bdd_sc_data_set_id='data_id'"
+Public Const Q_FUN_TCS_DATA = "Select * From [table_name] where fn_tc_id='fn_tc_id'"
+Public Const Q_FUN_TCS_NAME = "Select * From [table_name] where fn_tc_name='testCaseName' and region_code='region_id'"
+
+Public Const Q_FUN_UPDATE_SSN= "UPDATE [table_name] SET ssn_sequence='ssnSequence' where id >=0"
+Public Const Q_FUN_UPDATE_ACCOUNT= "UPDATE [table_name] SET checking_account_sequence='account_sequence' where id >=0"
+

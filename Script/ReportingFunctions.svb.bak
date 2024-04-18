@@ -1,0 +1,38 @@
+﻿'USEUNIT TestParameters
+'USEUNIT CommonUtility
+'USEUNIT FrameworkParameters
+
+Dim logName
+
+Public Function exportMHTLog()
+ logName = GetMHTReportFolder & "\execution-report.mht"
+ Call Log.SaveResultsAs(logName, lsMHT)
+End Function
+
+Public Function exportHTMLog()
+ logName = GetHtmlReportFolder & "\execution-report"
+ Call Log.SaveResultsAs(logName, lsHTML)
+End Function
+
+Public Function exportHTMLogAsZip()
+ logName = GetArchiveReportFolder & "\execution-report.zip"
+ Call Log.SaveResultsAs(logName, lsPackedHTML)
+End Function
+
+'###########################################################################################################################################
+'#Function Name     : takeScreenShot
+'#Function Description  : Generic Function to Capture Window ScreenShot 
+'#Function Parameters   : 
+'#Return Value          : Current windows ScreenShot
+'#Date                  : 8-April-2020
+'#Author(s)             : VAM
+'###########################################################################################################################################
+Function takeScreenShot()
+  Set oScreenshot = Sys.Desktop.Picture
+  Log.Picture oScreenshot
+End Function
+
+Public Sub PostErrorToLog(errorDescription)
+  Log.Picture Sys.Desktop.ActiveWindow, errorDescription
+'  Log.Picture DesktopScreenshot, "Object Not Identified"
+End Sub

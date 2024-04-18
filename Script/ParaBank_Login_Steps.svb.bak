@@ -1,0 +1,39 @@
+﻿'USEUNIT Allocator
+'USEUNIT CommonBusinessFunctions
+'USEUNIT ExcelDataAccess
+'USEUNIT FrameworkParameters
+'USEUNIT ParaBank_Login_Page
+'USEUNIT TestParameters
+
+' [Then I should see ParaBank Application Login page]
+Sub I_should_see_ParaBank_Application_Login_page()
+     Call ParaBank_Login_Page.IsLoginPageExist()
+End Sub
+
+' [When I enter ParaBank user id as {arg} and password {arg} and Click on Login]
+Sub I_enter_ParaBank_user_id_as_and_password_and_Click_on_Login(dbStrUserId,dbStrPassword)
+  Call ParaBank_Login_Page.EnterUserId(objTestDataDict.Item(dbStrUserId))
+  Call ParaBank_Login_Page.EnterPassword(objTestDataDict.Item(dbStrPassword))
+  Call ParaBank_Login_Page.ClickLogInButton()
+  Delay(3000)
+End Sub
+
+' [Then I should see ParaBank Home page]
+Sub I_should_see_ParaBank_Home_page()
+    Call ParaBank_Login_Page.IsHomePageExists()
+End Sub
+
+' [Then I click on ParaBank Signout to signed out successfully]
+Sub I_click_on_ParaBank_Signout_to_signed_out_successfully()
+  Call ParaBank_Login_Page.ClickSignOut()
+ End Sub
+ 
+
+
+
+
+
+
+
+
+

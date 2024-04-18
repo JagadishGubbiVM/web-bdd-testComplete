@@ -1,0 +1,29 @@
+﻿'USEUNIT Allocator
+'USEUNIT CommonBusinessFunctions
+'USEUNIT ExcelDataAccess
+'USEUNIT FrameworkParameters
+'USEUNIT ParaBank_NewAccount_Page
+'USEUNIT TestParameters
+
+
+' [When I navigates to Open New Account]
+Sub I_navigates_to_Open_New_Account()
+   Call ParaBank_NewAccount_Page.ClickLnkOpenNewAccount()
+   Delay(3000)
+End Sub
+
+' [When I select the type of account {arg}]
+Sub I_select_the_type_of_account_(AccountType)
+    Call ParaBank_NewAccount_Page.SelectAccountType(AccountType)
+End Sub
+
+' [When I click on Open New Account]
+Sub I_click_on_Open_New_Account()
+   Call ParaBank_NewAccount_Page.ClickBtnOpenNewAccount()
+    Delay(2000)
+End Sub
+
+' [Then I should see {arg} with new account number]
+Sub I_should_see_with_new_account_number(param1)
+  Call ParaBank_NewAccount_Page.IsMsgExists()
+End Sub

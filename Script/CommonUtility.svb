@@ -1,0 +1,465 @@
+﻿Option Explicit	'Forcing Variable declarations
+
+'######################################################################################################################################
+'#Function Name     : KillProcess
+'#Script Description  : To kill mutliple processes from
+'#Script Parameters   : comma separated process names
+'#Return Value          : None
+'#Date                  : 15-Aug-2019
+'#Author(s)             : VAM
+'#######################################################################################################################################
+Function KillProcess(strProcessNames)
+ Dim arrProcesses, strProcess, objWScript
+ Set objWScript = CreateObject("WScript.Shell")
+ arrProcesses = Split(strProcessNames,",")
+ For each strProcess in arrProcesses
+  KillProcess = objWScript.Run("taskkill /f /im " & strProcess &".exe", 0, True)
+  Delay 1000
+ Next
+ Set objWScript = Nothing
+End Function
+
+'######################################################################################################################################
+'#Function Name     : NullCheck
+'#Function Description  : verifies a string is null or empty
+'#Function Parameters   : string for null validation
+'#Return Value          : true or false
+'#Date                  : 15-Aug-2019
+'#Author(s)             : VAM
+'#######################################################################################################################################
+Public Function NullCheck(strToCheck)
+ If( (strToCheck <> "") and (strToCheck <> empty)) Then
+  NullCheck = True
+ Else
+  NullCheck = False
+ End If
+End Function
+
+'######################################################################################################################################
+'#Function Name    : GetProjectRootpath
+'#Script Description : To get project root path
+'#Script Parameters  : None
+'#Return Value    : None
+'#Date        : 15-Aug-2019
+'#Author(s)      : VAM
+'#######################################################################################################################################
+Public Function GetProjectRootpath()
+ Dim objFso : Set objFso = CreateObject("Scripting.FileSystemObject")
+ GetProjectRootpath = objFso.GetAbsolutePathName(".")
+ Set objFso = Nothing
+End Function
+
+'######################################################################################################################################
+'#Function Name    : CreateFolder
+'#Script Description : to create a new folder 
+'#Script Parameters  : strFolderPath
+'#Return Value    : project root path
+'#Date        : 15-Aug-2019
+'#Author(s)      : VAM
+'#######################################################################################################################################
+Public Function CreateFolder(strFolderPath)
+  Dim objFso : Set objFso = CreateObject("Scripting.FileSystemObject")
+  objFso.CreateFolder(strFolderPath)
+  Set objFso = Nothing
+End Function
+
+'######################################################################################################################################
+'#Function Name    : GetFolderNameByDateAndTime
+'#Script Description : to get a unique folder name based upon current time stamp 
+'#Script Parameters  : None
+'#Return Value    : unique folder name
+'#Date        : 15-Aug-2019
+'#Author(s)      : VAM
+'#######################################################################################################################################
+Public Function GetFolderNameByDateAndTime()
+ GetFolderNameByDateAndTime = Month(Now()) & "_" & Day(Now()) & "_" & Year(Now()) & "_"& Hour(Now()) & "-" & Minute(Now()) & "-" & Second(Now())
+End Function
+
+'######################################################################################################################################
+'#Function Name    : GetTimer
+'#Script Description : To get current system time
+'#Script Parameters  : 
+'#Return Value    : None
+'#Date        : 15-Aug-2019
+'#Author(s)      : VAM
+'#######################################################################################################################################
+Public Function GetTimer()
+ GetTimer = Timer()
+End Function
+
+'######################################################################################################################################
+'#Function Name    : GetCurrentTime
+'#Script Description : to get time based on current time stamp 
+'#Script Parameters  : 
+'#Return Value    : current time
+'#Date        : 15-Aug-2019
+'#Author(s)      : VAM
+'#######################################################################################################################################
+Public Function GetCurrentTime()
+ GetCurrentTime = Now()
+End Function
+
+'###################################################################################################################
+'#Function Description	: Function to calculate the execution time for the current iteration
+'#Input Parameters		 : strStartTime, strEndTime
+'#Return Value			  : strSingleIterationExecutionTime
+'#Author					   : VAM
+'#Date Created			  : 02-Apr-2020
+'###################################################################################################################
+Public Function GetTimeDifference(strStartTime, strEndTime)
+	Dim strSeconds, strMinutes, strHours, strSingleIterationExecutionTime
+	strSingleIterationExecutionTime = DateDiff("s", strStartTime, strEndTime)
+	strSingleIterationExecutionTime = CSng(strSingleIterationExecutionTime)
+	strSeconds = strSingleIterationExecutionTime Mod 60
+	If Len(strSeconds) = 1 Then
+		strSeconds = "0" & strSeconds
+	End If
+	strMinutes = (strSingleIterationExecutionTime Mod 3600) \ 60
+	strHours = Int(strSingleIterationExecutionTime/3600)
+	If strHours <> "0" Then
+		GetTimeDifference = strHours & " Hour(s), " & strMinutes & " minute(s), " & strSeconds & " seconds"
+	Else
+		GetTimeDifference = strMinutes & " minute(s), " & strSeconds & " seconds"
+	End If
+End Function
+
+
+'###################################################################################################################
+'#Function Description	: Function to Export Logs
+'#Input Parameters		 : None
+'#Return Value			  : Log File in HTML Format
+'#Author					   : VAM
+'#Date Created			  : 09-June-2020
+'###################################################################################################################
+Sub ExportLogs
+ Dim Destination
+ Call Log.SaveResultsAs(Destination, lsHTML, true, 1)
+End Sub
+
+
+'###################################################################################################################
+'#Function Description	: Function to Capture Window Screenshot
+'#Input Parameters		 : None
+'#Return Value			  : Desktop Screenshot
+'#Author					   : VAM
+'#Date Created			  : 09-June-2020
+'###################################################################################################################
+
+Function DesktopScreenshot()
+ DestinationPath = ProjectSuite.Variables.ScreenShots
+  Set oScreenShot = Sys.Desktop.Picture
+  oScreenShot.SaveToFile(DestinationPath&"\"&ProjectSuite.Variables.imageName&".png")
+End Function
+
+'###################################################################################################################
+'#Function Description	: Function to write bytes to file
+'#Input Parameters		 : FilePath, String
+'#Return Value			  : Note
+'#Author					   : VAM
+'#Date Created			  : 10-June-2020
+'###################################################################################################################
+Sub WriteByteToFile
+  Dim strPath, objMyFile
+  strPath = "H:\BinraryFile\BinaryFile.txt"
+  Set objMyFile = aqFile.OpenBinaryFile(strPath, aqFile.faWrite)
+  objMyFile.WriteString("TEST")
+  objMyFile.WriteString("Automation")
+  objMyFile.WriteByte(123)
+  objMyFile.Close()
+End Sub
+
+'###################################################################################################################
+'#Function Description	: Function to Read bytes from file
+'#Input Parameters		 : FilePath
+'#Return Value			  : File Content
+'#Author					   : VAM
+'#Date Created			  : 10-June-2020
+'###################################################################################################################
+Sub ReadByteFromFile
+ Dim strPath
+ strPath = "H:\BinraryFile\BinaryFile.txt"
+
+ Set objMyFile = aqFile.OpenBinaryFile(strPath, aqFile.faRead)
+ Log.Message("File by bytes:")
+
+ ' Reads bytes the file and posts them to the test log
+ While Not objMyFile.IsEndOfFile()
+  s = objMyFile.ReadByte()
+  Log.Message(s)
+ WEnd
+
+ Call objMyFile.Close()
+End Sub
+
+
+'###################################################################################################################
+'#Function Description	: Function to converting between various data types
+'#Input Parameters		 : FilePath
+'#Return Value			  : File Content
+'#Author					   : VAM
+'#Date Created			  : 10-June-2020
+'###################################################################################################################
+
+Sub ConvertDataType(vdataType)
+ vConDataType = aqConvert.CurrencyToFormatStr(vdataType)
+ vConDataType = aqConvert.CurrencyToStr(vdataType)
+ vConDataType = aqConvert.DateTimeToFormatStr(vdataType)
+ vConDataType = aqConvert.DateTimeToStr(vdataType)
+ vConDataType = aqConvert.FloatToStr(vdataType)
+ vConDataType = aqConvert.IntToStr(vdataType)
+ vConDataType = aqConvert.StrToCurrency(vdataType)
+ vConDataType = aqConvert.StrToDate(vdataType)
+ vConDataType = aqConvert.StrToDateTime(vdataType)
+ vConDataType = aqConvert.StrToFloat(vdataType)
+ vConDataType = aqConvert.StrToInt(vdataType)
+ vConDataType = aqConvert.StrToInt64(vdataType)
+ vConDataType = aqConvert.StrToTime(vdataType)
+ vConDataType = aqConvert.TimeIntervalToStr(vdataType)
+ vConDataType = aqConvert.VarToBool(vdataType)
+ vConDataType = aqConvert.VarToFloat(vdataType)
+ vConDataType = aqConvert.VarToInt(vdataType)
+ vConDataType = aqConvert.VarToStr(vdataType)
+End Sub
+
+'###################################################################################################################
+'#Function Description	: Function to check TimeDifferences
+'#Input Parameters		 : FilePath
+'#Return Value			  : File Content
+'#Author					   : VAM
+'#Date Created			  : 11-June-2020
+'###################################################################################################################
+
+Sub FindTimeDifference
+Dim Time1, Time2, Difference
+ Time1 = aqDateTime.Time()
+ Time2 = aqDateTime.AddTime(Time1,1,0,0,5)
+ Difference = aqDateTime.TimeInterval(Time1, Time2)
+ Log.Message("The interval as DateTime: " + aqConvert.DateTimeToStr(Difference))
+ ' Posts "The interval as DateTime: 12/31/1899 12:00:05 AM"
+ Log.Message("The interval in Days:Hours:Minutes:Seconds format: " + aqConvert.TimeIntervalToStr (Difference))
+ ' Posts "The interval in Days:Hours:Minutes:Seconds format: 1:00:00:05"
+End Sub
+
+
+'###################################################################################################################
+'#Function Description	: Function to check TimeDifferences
+'#Input Parameters		 : FilePath
+'#Return Value			  : File Content
+'#Author					   : VAM
+'#Date Created			  : 11-June-2020
+'###################################################################################################################
+
+Sub ChangingTime
+ Dim Time1, Time2, Time3, Time4, Time5, Time6, Time7
+
+ Time1 = aqDateTime.Now
+ Time2 = aqDateTime.AddDays(Time1, 5)
+ Time3 = aqDateTime.AddHours(Time1, 7)
+ Time4 = aqDateTime.AddMinutes(Time1, 24)
+ Time5 = aqDateTime.AddMonths(Time1, 2)
+ Time6 = aqDateTime.AddSeconds(Time1, 15)
+ Time7 = aqDateTime.AddTime(Time1, 9, 3, 24, 51)
+
+ Log.Message aqConvert.DateTimeToStr(Time1)
+ Log.Message aqConvert.DateTimeToStr(Time2)
+ Log.Message aqConvert.DateTimeToStr(Time3)
+ Log.Message aqConvert.DateTimeToStr(Time4)
+ Log.Message aqConvert.DateTimeToStr(Time5)
+ Log.Message aqConvert.DateTimeToStr(Time6)
+ Log.Message aqConvert.DateTimeToStr(Time7)
+End Sub
+
+
+
+'###################################################################################################################
+'#Function Description	: Function to divides the specified string into characters
+'#Input Parameters		 : String
+'#Return Value			  : Characters from String
+'#Author					   : VAM
+'#Date Created			  : 11-June-2020
+'###################################################################################################################
+
+Sub GetEachCharactersFromString
+ Dim aString, i
+ 
+ strString = "Per aspera ad astra"
+ Log.Message("The string is : " & strString)
+ Log.Message("Getting letter by letter using the GetChar method:")
+ 
+ For i = 0 To aqString.GetLength(strString)-1
+  Log.Message(aqString.GetChar(strString, i))
+ Next
+ 
+End Sub
+
+
+
+'###################################################################################################################
+'#Function Description	: Function to add Word/Character to the string
+'#Input Parameters		 : String
+'#Return Value			  : String
+'#Author					   : VAM
+'#Date Created			  : 11-June-2020
+'###################################################################################################################
+
+Sub AddItemBetweenStrings
+ Dim str
+
+ str = "Online Account Opening for New Customer"
+ aqString.ListSeparator = " "
+
+ Log.Message str
+
+ str = aqString.AddListItem(str, "DAO--", 0)
+ Log.Message str
+
+ str = aqString.AddListItem(str, "(OAO)", 4)
+ Log.Message str
+
+ str = aqString.AddListItem(str, "/ Existing", 7)
+ Log.Message str
+End Sub
+
+
+'###################################################################################################################
+'#Function Description	: Function to compare strings
+'#Input Parameters		 : String
+'#Return Value			  : Boolean
+'#Author					   : VAM
+'#Date Created			  : 11-June-2020
+'###################################################################################################################
+
+Sub CompareStrings
+ Dim str1, str2, strFormat
+ str1 = "C"
+ str2 = "B"
+
+ Select Case aqString.Compare(str1, str2, False)
+  Case -1 strFormat = """%s"" is less than ""%s""."
+  Case 0  strFormat = """%s"" and ""%s"" are the same."
+  Case 1  strFormat = """%s"" is greater than ""%s""."
+ End Select
+ 
+ Log.Message aqString.Format(strFormat, str1, str2)
+End Sub
+
+'###################################################################################################################
+'#Function Description	: Function to Concatenate strings
+'#Input Parameters		 : Strings
+'#Return Value			  : String
+'#Author					   : VAM
+'#Date Created			  : 12-June-2020
+'###################################################################################################################
+Sub StringConcatenation
+ Dim Str1
+ Str1 = "String No 1 "
+ Log.Message(aqString.Concat(Str1, "String No 2"))
+ Log.Message(Str1 + "String No 2 " + "String No " + aqConvert.IntToStr(3))
+ Log.Message(Str1 & "String No 2 " & "String No " & 3)
+End Sub
+
+'###################################################################################################################
+'#Function Description	: Function to find substring from input string
+'#Input Parameters		 : String
+'#Return Value			  : String
+'#Author					   : VAM
+'#Date Created			  : 16-June-2020
+'###################################################################################################################
+Sub FindString
+ Dim strString, strSubString, strRes
+
+ strString = "Peoples United Bank Automation Testing"
+ strSubString = "Automation"
+ strRes = aqString.Find(strString, strSubString)
+ If Res <> -1 Then
+  Log.Message("Substring '" & strSubString & "' was found in string '" & strString & "' at position " & strRes)
+ Else
+  Log.Message("There are no occurrences of '" & strSubString & "' in '" & strString & "'")
+ End If
+End Sub
+
+'###################################################################################################################
+'#Function Description	: Function to get substring from input string
+'#Input Parameters		 : String
+'#Return Value			  : String
+'#Author					   : VAM
+'#Date Created			  : 16-June-2020
+'###################################################################################################################
+
+Sub GetSubStringFromCharLocation
+
+ Str = "123456789"
+ 
+ Log.Message( aqString.SubString(Str, 0, 4) ) ' Posts "1234"
+ Log.Message( aqString.SubString(Str, 3, 5) ) ' Posts "45678"
+ Log.Message( aqString.SubString(Str, 6, 20) ) ' Posts "789"
+ Log.Message( aqString.SubString(Str, 2, 0) ) ' Posts ""
+ 
+End Sub
+
+
+
+'###################################################################################################################
+'#Function Description	: Function to capture and store test step status with test step description
+'#Input Parameters		 : String
+'#Return Value			  : String
+'#Author					   : VAM
+'#Date Created			  : 16-June-2020
+'###################################################################################################################
+Public Function TestStepDetails()
+ 
+End Function
+
+
+
+'###################################################################################################################
+'#Function Description	: Function to capture and store test case status with test case description
+'#Input Parameters		 : String
+'#Return Value			  : String
+'#Author					   : VAM
+'#Date Created			  : 16-June-2020
+'###################################################################################################################
+Public Function TestCaseDetails()
+ 
+End Function
+
+
+Function GetAuthCodeFromOutlookEmail()
+ Dim strSenderMailId, strSenderSubject
+ On Error Resume Next
+	Const olFolderInbox = 6
+	Set objOutlook = CreateObject ("Outlook.Application")
+	set objNamespace = objOutlook.GetNamespace ("MAPI")
+	Set objFolder = objNamespace.GetDefaultFolder(olFolderInbox)
+	set objItems = objFolder.Items
+	strSenderMailId = "DoNotReply@Test.com"
+	strSenderSubject = "Your requested People's United Bank authentication code."
+ Flag = 0
+ DelayTime = 5000
+ DO Until Flag = 1
+  
+ 	For Each objItem in objItems
+ 		strSenderEmail = objItem.SenderEmailAddress
+ 		strSenderEmailSubject = objItem.subject
+ 		If objItem.unread then
+ 			If strSenderEmail = strSenderMailId AND strSenderEmailSubject = strSenderSubject Then
+ 				objItem.UnRead = False
+ 				GetAuthCodeFromOutlookEmail = True
+     MsgBox "Found"
+     Flag = 1
+ 				Exit for
+     Exit Do
+ 			Else
+ 				GetAuthCodeFromOutlookEmail = False
+ 			End If
+ 		Else
+ 			GetAuthCodeFromOutlookEmail = False
+ 		End if 
+ 	Next
+  Delay(DelayTime)
+  TotalDelay = TotalDelay+5000
+  If TotalDelay >= 60000 Then
+   Exit Do
+  End If
+ Loop
+End Function

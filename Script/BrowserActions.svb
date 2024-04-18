@@ -1,0 +1,35 @@
+﻿'USEUNIT TestParameters
+'USEUNIT Allocator
+
+'######################################################################################################################################
+'#Function Name     : CloseBrowser
+'#Function Description  : closes all browser instances
+'#Function Parameters   : none
+'#Return Value          : None
+'#Date                  : 15-Aug-2019
+'#Author(s)             : VAM
+'#######################################################################################################################################
+Public Sub CloseBrowser()
+  if NOT LCASE(Allocator.browser)="edge" then 
+   Sys.Process(Allocator.browser).Terminate
+  else 
+  Sys.Process("msedge").Terminate
+  End if   
+End Sub
+
+
+'###########################################################################################################################################
+'#Function Name     : CloseAllBrowsers
+'#Function Description  : Generic Function to Close all Browsers
+'#Function Parameters   : 
+'#Return Value          : All Browsers will close
+'#Date                  : 8-April-2020
+'#Author(s)             : VAM
+'###########################################################################################################################################
+Public Function CloseAllBrowsers()
+ While Sys.WaitBrowser().Exists
+   Log.Message Sys.WaitBrowser().Name &" is running hence Closed"
+   Call Sys.WaitBrowser().Terminate
+ Wend
+End Function
+

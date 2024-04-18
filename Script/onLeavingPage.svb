@@ -1,0 +1,3 @@
+﻿Sub GeneralEvent_OnWebQuit(Sender, WebBrowser)
+ Events.GeneralEvent.AttachToTestComplete
+End Sub

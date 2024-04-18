@@ -1,0 +1,47 @@
+﻿'USEUNIT CommonPage
+'USEUNIT ExcelDataAccess
+'USEUNIT Allocator
+'USEUNIT TestParameters
+'USEUNIT FrameworkParameters
+'USEUNIT CommonBusinessFunctions
+'USEUNIT WebElementFinder
+'USEUNIT WebActions
+'USEUNIT ReportLogger
+'USEUNIT ReportingFunctions
+
+
+Private po_txtLoanAmount : po_txtLoanAmount  ="css=input[id='amount']"
+Private po_txtDownPayment : po_txtDownPayment  ="css=input[id='downPayment']"
+Private po_btnApplyNow : po_btnApplyNow = "xpath=//input[@value='Apply Now']"
+Private po_lblLoanRequestProcessed : po_lblLoanRequestProcessed  = "xpath=//*[contains(text(),'Congratulations, your loan has been approved.')]"  
+Private po_lnkRequestLoan : po_lnkRequestLoan = "xpath=//*[contains(text(),'Request Loan')]"
+
+'#Function Description  : Function to click Request Loan link
+Function ClickLnkRequestLoan()
+  Call WebActions.ClickElement(FindPageChildElementByXPath(objPage,po_lnkRequestLoan))
+End Function
+
+'#Function Description  : Function to Enter Loan information
+Function EnterLoan_information(strField,strValue)
+  'IsElementExist(WaitPageElementByCss(objPage,po_txtLoanAmount))
+  if strField="LoanAmount"  then
+  Call WebActions.ClickElementAndLog(FindElementByCss(objPage,po_txtLoanAmount),"LoanAmount")
+  Call WebActions.SetKeys(FindElementByCss(objPage,po_txtLoanAmount),strValue)
+  Elseif strField="DownPayment" then
+  Call WebActions.SetKeys(FindElementByCss(objPage,po_txtDownPayment),strValue)
+  End If
+End Function
+
+'#Function Description  : Function to Apply Now button
+Function ClickBtnApplyNow()
+  Call WebActions.ClickElement(FindPageChildElementByXPath(objPage,po_btnApplyNow))
+End Function
+
+'#Function Description  : Function to check success message
+Function IsLoanMsgExists()
+  If  IsElementExist(FindPageChildElementByXPath(objPage,po_lblLoanRequestProcessed)) Then   
+    LogMessage "Congratulations, your loan has been approved."
+  Else
+    LogErrorWithImage "Loan Request Failed"
+  End If
+End Function

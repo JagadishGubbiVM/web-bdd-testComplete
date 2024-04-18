@@ -1,0 +1,70 @@
+Naming Convention
+	-1_File Naming Convention
+		- All file name should follow pascal casing naming convention
+		- First letter of each word should start with Upper Case
+		- Example: TestFileName
+		- Feature File
+		- Page Object File
+		- Step Definitions File
+		- Unit Script File
+		
+	-2_Variable Naming Convention
+	
+		-2.0_Common Variable Naming
+			- All variable should follow camel casing naming convention
+			- First letter of a variable should start with lower Case
+			- Then First letter of each subsequent word should start with Upper Case
+			- Variable Data Type should be Prefixed to the Variable name
+			- Each variable should start with its datatype as prefix as mentioned below
+				- for String = str<CamelCasingVariableName>
+				- for Character = chr<CamelCasingVariableName>
+				- for Integer = int<CamelCasingVariableName>
+				- for Long = lng<CamelCasingVariableName>
+				- for float = flt<CamelCasingVariableName>
+				- for double = dbl<CamelCasingVariableName>
+				- for Boolean = bol<CamelCasingVariableName>
+				- for array = arr<CamelCasingVariableName>
+				
+		-2.1_Private Variable Naming
+			- Pattern: <Modifier> <p_><dataType><CamelCasingVariableName>
+			- Example: Privae p_strTestName
+				- Private variable should be preceded with Private keyword
+				- First 2 characters of the variable name should be p_
+				- After that follow rules from 2.0_Common Variable Naming
+				
+		-2.2_Page Object Variable Naming
+			- Pattern: Private <po_><UIElementType><CamelCasingVariableName>
+			- Page Object variable access modifer should be always Private
+			- First 3 characters of the should be po_
+			- After that Each variable should start with its UIElementType as prefix as mentioned below
+				- for Textbox = txt<CamelCasingVariableName>
+				- for TextArea = txtar<CamelCasingVariableName>
+				- for Button = btn<CamelCasingVariableName>
+				- for Listbox = lst<CamelCasingVariableName>
+				- for Combobox = cmb<CamelCasingVariableName>
+				- for RadioButton = rdbtn<CamelCasingVariableName>
+				- for Checkbox = chk<CamelCasingVariableName>
+				- for Link = lnk<CamelCasingVariableName>
+				- for Label = lbl<CamelCasingVariableName>
+			- After that follow rules from 1.0_Common Variable Naming
+			- Example: Privae po_txtUserName
+			
+		-2.3_Constants Naming
+			- Pattern: Public Const <CONSTTYPE_CONST_NAME>
+			- Constant variable access modifer should be always Public
+			- Each word in the constant variable will be in Upper Case
+			- Each word in the constant variable will be separated by Underscore(_)
+			- CONSTTYPE(s)
+				- T for Test Constants
+				- Q for Query Constants
+				- E for Error Constants
+			- Example: Public Const T_NEW_CUSTOMER
+			
+		-2.4_Object Variable Naming
+			- Pattern: obj<CamelCasingVariableName>
+			- When there is a need to Setting a object By using Set Keyword
+			- Example: objFso, objDict
+			
+	-3_Function/Sub Naming Convention
+		- All method name should follow pascal casing naming convention
+		- First letter of each word should start with Upper Case

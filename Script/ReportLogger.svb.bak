@@ -1,0 +1,88 @@
+﻿'USEUNIT Allocator
+'USEUNIT FrameworkParameters
+'TestBaseRunner
+
+Public Sub LogMessage(strMessage)
+ Set attr = LogPassTextAttribute()
+ Log.Message strMessage,"",300,attr
+ Set attr = Nothing
+' 'If Project.Variables.screenshotLogger = True then
+'    Call logScreenshotsToWord()
+' End If
+End Sub
+
+Public Sub LogMessageWithImage(strMessage)
+ Set attr = LogPassTextAttribute()
+ Log.Message strMessage,"",300,attr,objPage.Picture
+ Set attr = Nothing
+End Sub
+
+Public Sub LogError(strMessage)
+ Set attr = LogFailTextAttribute()
+ Log.Error strMessage,"",300,attr
+ Set attr = Nothing
+ If Project.Variables.screenshotLogger = True then
+     Call logScreenshotsToWord()
+ End If
+End Sub
+
+Public Sub LogErrorWithImage(strMessage)
+ Set attr = LogFailTextAttribute()
+ Log.Error strMessage,"",300,attr,Allocator.objPage.Picture
+ Set attr = Nothing
+End Sub
+
+Public Sub LogWarning(strMessage)
+ Set attr = LogWarnTextAttribute()
+ Log.Warning strMessage,"",300,attr
+ Set attr = Nothing
+End Sub
+
+Public Sub LogWarningWithImage(strMessage)
+ Set attr = LogWarnTextAttribute()
+ Log.Warning strMessage,"",300,attr,objPage.Picture
+ Set attr = Nothing
+End Sub
+
+Public Function LogPassTextAttribute()
+ Set logAttribute = Log.CreateNewAttributes
+ logAttribute.FontColor = BuiltIn.clGreen
+ logAttribute.Bold = True
+ Set LogPassTextAttribute = logAttribute
+End Function
+
+Public Function LogFailTextAttribute()
+ Set logFailAttribute = Log.CreateNewAttributes
+ logFailAttribute.FontColor = BuiltIn.clRed
+ logFailAttribute.Bold = True
+ Set LogFailTextAttribute = logFailAttribute
+End Function
+
+Public Function LogWarnTextAttribute()
+ Set logWarnAttribute = Log.CreateNewAttributes
+ logWarnAttribute.FontColor = BuiltIn.clMaroon
+ logWarnAttribute.Bold = True
+ Set LogWarnTextAttribute = logWarnAttribute
+End Function
+
+Public Function logScreenshotsToWord()
+
+  Dim objWord, objDoc, objSelection
+  
+  Sys.Desktop.Picture.SaveToFile GetScreenshotFolderPath &"\docScreenShot.png"
+
+  Set objWord = CreateObject("Word.Application")
+  Set objDoc = objWord.Documents.Open(GetScreenshotDocPath)
+  Set objSelection = objWord.Selection
+  objWord.Selection.EndKey 6,0
+  objSelection.InlineShapes.AddPicture(GetScreenshotFolderPath &"\docScreenShot.png")
+  objSelection.insertbreak
+  objWord.ActiveDocument.Save
+  objWord.ActiveDocument.Close
+  objWord.Quit
+
+  Set objDoc = Nothing
+  Set objSelection = Nothing
+  
+End Function
+

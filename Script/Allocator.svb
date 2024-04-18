@@ -1,0 +1,124 @@
+﻿'USEUNIT CommonUtility
+'USEUNIT RuntimeProjectConfigs
+'USEUNIT FrameworkParameters
+'USEUNIT TestParameters
+'USEUNIT ExcelDataAccess
+'USEUNIT BrowserActions
+'USEUNIT ReportLogger
+Option Explicit
+
+Public objPage
+Public strBrowserName,strURL, browser, tempBrowser
+
+Private p_strOverallStartTime
+Private p_strOverallEndTime
+Private p_bolIsExecutionStarted : p_bolIsExecutionStarted = False
+Private p_bolIsExecutionEnded : p_bolIsExecutionEnded = False
+Private p_strRunSettingRelativePath : p_strRunSettingRelativePath = "\02_Execution_Manager\RunSettings.xml"
+
+'######################################################################################################################################
+'#Function Name         : OnExecutionStart
+'#Function Description  : gets the run config data from RunManager, stores data into dictionary Object and navigates to URL 
+'#Function Parameters   : none
+'#Return Value          : None
+'#Date                  : 15-Aug-2019
+'#Author(s)             : VAM
+'#######################################################################################################################################
+Public Sub OnExecutionStart()
+ If Not p_bolIsExecutionStarted Then
+  InitializeTest
+  p_bolIsExecutionStarted = True
+ End If
+End Sub
+
+Private Sub InitializeTest()
+
+   p_strOverallStartTime = Now()
+   CloseExcelBeforeStart
+   SetProjectPath
+   SetRunSettingXmlPath(p_strRunSettingRelativePath)
+   LoadTestParameters
+   CloseOtherProcesses
+'   SetDatabasePath  ' Excel path creation
+   SetRuntimeProjectConfigs
+   'SetReportFolder
+   SetHtmlReportFolder
+   SetArchiveReportFolder
+   SetMHTReportFolder
+   SetScreenShotDocument
+   SetHealthCheckReportFolder
+
+End Sub
+
+'######################################################################################################################################
+'#Function Name         : OnExecutionEnd
+'#Function Description  : execution tear down process, such as close browser etc..
+'#Function Parameters   : none
+'#Return Value          : None
+'#Date                  : 15-Aug-2019
+'#Author(s)             : VAM
+'#######################################################################################################################################
+Public Sub OnExecutionEnd()
+ ExcelDataAccess.DBDisconnect
+ ExportHTMLog
+ ExportHTMLogAsZip
+End Sub
+
+Private Sub CloseExcelBeforeStart()
+ KillProcess "excel"
+End Sub
+
+Private Sub CloseOtherProcesses()
+ KillProcess GetProcessToClose
+End Sub
+
+Public Sub SetPage(pageObject)
+ Set objPage = pageObject
+End Sub
+
+Public Function GetPage()
+ Set GetPage = objPage
+End Function 
+
+'######################################################################################################################################
+'#Function Name         : NavigateToURL
+'#Function Description  : navigates to application url 
+'#Function Parameters   : browser name and url 
+'#Return Value          : None
+'#Date                  : 15-Aug-2019
+'#Author(s)             : VAM
+'#######################################################################################################################################
+Public Function NavigateToURL(strEnvName)
+ On Error Resume Next
+ strBrowserName = GetBrowserName
+ If Ucase(strEnvName)="QA" Then
+  strURL = GetEnvironmentUrl
+ End If
+ If Ucase(strEnvName)="UAT" Then  
+  strURL = GetEnvironmentUrl
+ End If
+ Call BrowserActions.CloseAllBrowsers()
+ If ((NullCheck(strBrowserName)) AND (NullCheck(strURL)) ) Then
+  browser = Lcase(trim(strBrowserName))
+  If Browsers.Item(browser).Description = "" Then
+  tempBrowser = browser
+  strBrowserName = GetDefaultBrowser
+  browser = Lcase(trim(strBrowserName))
+  LogWarning tempBrowser+" browser is not available."+"However Execution is started with default browser "+ browser
+  End If
+  Browsers.Item(browser).Run
+  Browsers.Item(browser).Navigate(strURL)
+  Sys.Browser(browser).BrowserWindow(0).Maximize
+  SetPage(Sys.Browser(browser).Page("*"))
+  objPage.Wait(30000)
+  If (objPage.Exists) Then
+   LogMessageWithImage "Navigated to URL: " & strURL
+  Else
+   LogErrorWithImage "Unable to Navigate to URL: " & strURL
+  End If
+ Else
+  LogErrorWithImage "Unable to Navigate to URL because the browser name or URL is null: " & strURL
+ End If
+ On Error GoTo 0
+End Function
+

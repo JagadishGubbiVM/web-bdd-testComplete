@@ -1,0 +1,31 @@
+﻿'USEUNIT Allocator
+'USEUNIT CommonBusinessFunctions
+'USEUNIT ExcelDataAccess
+'USEUNIT FrameworkParameters
+'USEUNIT ParaBank_TransferFunds_Page
+'USEUNIT TestParameters
+
+
+
+' [When I navigates to Transfer Funds]
+Sub I_navigates_to_Transfer_Funds()
+    Call ParaBank_TransferFunds_Page.ClickLnkTransferFunds() 
+     Delay(2000)
+End Sub
+
+' [When I Selects {arg} {arg} and {arg}]
+Sub I_Selects_and_(strFrom, strTo, strAmount)
+   Call ParaBank_TransferFunds_Page.EnterAmount(objTestDataDict.Item(strAmount))
+   Call ParaBank_LoginPage.SelectAccountNumber(objTestDataDict.Item(strFrom), objTestDataDict.Item(strTo))
+End Sub
+
+' [When I click on Transfer]
+Sub I_click_on_Transfer()
+   Call ParaBank_TransferFunds_Page.ClickBtnTransferFunds()
+    Delay(2000)
+End Sub
+
+' [Then I should see {arg}]
+Sub I_should_see_(param1)
+   Call ParaBank_TransferFunds_Page.IsTransferMsgExists() 
+End Sub

@@ -1,0 +1,3 @@
+﻿Sub UnExpectedWindow_OnUnexpectedWindow(Sender, Window, LogParams)
+ Events.UnExpectedWindow.AttachToTestComplete
+End Sub

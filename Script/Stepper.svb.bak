@@ -1,0 +1,8 @@
+﻿'USEUNIT WebElementFinder
+'USEUNIT WebActions
+'USEUNIT Allocator
+'USEUNIT ReportLogger
+'USEUNIT TestParameters
+'USEUNIT CommonBusinessFunctions
+
+Private po_lblStepIndicator : po_lblStepIndicator = "xpath=//ol[@class='stepIndicator']"

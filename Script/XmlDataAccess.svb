@@ -1,0 +1,115 @@
+﻿'USEUNIT FrameworkParameters
+
+Option Explicit	'Forcing Variable declarations
+
+'###################################################################################################################
+'Function Description	: Function to get configuration data value from the RunSettings.xml based on input key
+'Input Parameters		 : strKey
+'Return Value			  : strValue
+'Author					   : VAM
+'Date Created			  : 02-Apr-2020
+'###################################################################################################################
+Public Function GetValue(strKey)
+	Dim objXmlDoc: Set objXmlDoc = CreateObject("Microsoft.XMLDOM")
+	Dim objAllnodes, objNode, objFirstNode, objValueNode, strQuery, strValue
+	Dim strXmlFile : strXmlFile = FrameworkParameters.GetRunSettingXmlPath()
+	
+ objXmlDoc.Load strXmlFile
+	
+	strQuery = "//Project/Variable"
+	Set objAllNodes = objXmlDoc.selectNodes(strQuery)
+	If objAllNodes.length > 0 Then
+		For Each objNode in objAllNodes
+			Set objFirstNode = objNode.firstChild
+			If objFirstNode.text = strKey Then
+				Set objValueNode = objFirstNode.nextSibling
+				strValue = objValueNode.Text
+				Exit For
+			End If
+		Next
+	End If
+	Set objXmlDoc = Nothing
+	GetValue = CStr(strValue)
+End Function
+
+'#############################################################################################################################
+'Function Description	: Function to get all configuration data values from the RunSettings.xml and add to dictionary object
+'Input Parameters		 : None
+'Return Value			  : all values in dictionary object
+'Author					   : VAM
+'Date Created			  : 02-Apr-2020
+'#############################################################################################################################
+Public Function GetAllValues()
+ Dim strKey,strValue,bolEnvFlag
+	Dim objAllnodes,objEnvAllNodes, objNode, objFirstNode, objValueNode
+ Dim strQuery,strQuery1
+ Dim objSecondNode,objThirdNode, strXmlFile, objRunConfigDict, objXmlDoc
+ 
+ strXmlFile = FrameworkParameters.GetRunSettingXmlPath()
+ Set objRunConfigDict = CreateObject("Scripting.Dictionary")
+	Set objXmlDoc = CreateObject("Microsoft.XMLDOM")
+ objXmlDoc.Load strXmlFile
+	
+	strQuery = "//Project//Variable"
+	Set objAllNodes = objXmlDoc.selectNodes(strQuery)
+	If objAllNodes.length > 0 Then
+		For Each objNode in objAllNodes
+   Set objFirstNode = objNode.firstChild
+   strKey = objFirstNode.text
+			Set objValueNode = objFirstNode.nextSibling
+			strValue = objValueNode.Text
+   objRunConfigDict.Add strKey,strValue
+		Next
+	End If
+ Set objAllNodes = Nothing
+ 
+ strQuery1 = "//Project/Environments/Environment"
+ Set objEnvAllNodes = objXmlDoc.selectNodes(strQuery1)
+ If objEnvAllNodes.length > 0 Then
+		For Each objNode in objEnvAllNodes
+   Set objFirstNode = objNode.firstChild
+   bolEnvFlag = UCase(objFirstNode.Text)
+   If bolEnvFlag = "TRUE" Then
+    Set objSecondNode = objFirstNode.nextSibling
+    strKey = objSecondNode.Text
+    Set objThirdNode = objSecondNode.nextSibling
+    strValue = objThirdNode.Text
+    objRunConfigDict.Add "EnvironmentName",strKey
+    objRunConfigDict.Add "EnvironmentURL",strValue
+    Exit For
+   End If
+		Next
+	End If
+ 
+	Set objXmlDoc = Nothing
+	Set GetAllValues = objRunConfigDict
+End Function
+
+'###################################################################################################################
+'Function Description	: Function to set configuration data to the RunSettings.xml
+'Input Parameters		 : strKey, strValue
+'Return Value			  : None
+'Author					   : VAM
+'Date Created			  : 02-Apr-2020
+'###################################################################################################################
+Public Sub SetValue(strKey, strValue)
+	Dim objXmlDoc: Set objXmlDoc = CreateObject("Microsoft.XMLDOM")
+	Dim objAllNodes, objNode, objFirstNode, objValueNode, strQuery
+	Dim strXmlFile : strXmlFile = FrameworkParameters.GetRunSettingXmlPath()
+	objXmlDoc.Load strXmlFile
+	
+	strQuery = "//Project//Variable"
+	Set objAllNodes = objXmlDoc.selectNodes(strQuery)
+	If objAllNodes.length > 0 Then
+		For Each objNode in objAllNodes
+			Set objFirstNode = objNode.firstChild
+			If objFirstNode.text = strKey Then
+				Set objValueNode = objFirstNode.nextSibling
+				objValueNode.Text = strValue
+				Exit For
+			End If
+		Next
+		objXmlDoc.Save strXmlFile
+	End If
+	Set objXmlDoc = Nothing
+End Sub

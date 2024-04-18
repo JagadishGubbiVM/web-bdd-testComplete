@@ -1,0 +1,48 @@
+﻿'USEUNIT CommonPage
+'USEUNIT ExcelDataAccess
+'USEUNIT Allocator
+'USEUNIT TestParameters
+'USEUNIT FrameworkParameters
+'USEUNIT CommonBusinessFunctions
+'USEUNIT WebElementFinder
+'USEUNIT WebActions
+'USEUNIT ReportLogger
+'USEUNIT ReportingFunctions
+
+Private po_lnkTransferFunds : po_lnkTransferFunds ="xpath=//*[contains(text(),'Transfer Funds')]"
+Private po_txtAmount : po_txtAmount ="css=input[id='amount']"
+Private po_slctFromAccountNumber : po_slctFromAccountNumber  ="xpath=//select[@id='fromAccountId']"
+Private po_slctToAccountNumber : po_slctToAccountNumber  ="xpath=//select[@id='toAccountId']"
+Private po_btnTransferFunds : po_btnTransferFunds = "xpath=//input[@value='Transfer']"
+Private po_lblTransferCompleted : po_lblTransferCompleted = "xpath=//*[contains(text(),'Transfer Complete!')]" 
+
+'#Function Description  : Function to Click Transfer Funds link  
+Function ClickLnkTransferFunds()
+  Call WebActions.ClickElement(FindPageChildElementByXPath(objPage,po_lnkTransferFunds))
+End Function
+
+'#Function Description  : Function to Enter Amount 
+Function EnterAmount(StrAmount)
+  Call WebActions.ClickElementAndLog(FindElementByCss(objPage,po_txtAmount),"Amount")
+  Call WebActions.SetKeys(FindElementByCss(objPage,po_txtAmount),StrAmount)
+End Function
+
+'#Function Description  : Function to select From and TO account numbers for Transfer Funds 
+Function SelectAccountNumber(strFromAccount,strToAccount)
+  Call WebActions.selectItem(FindPageChildElementByXPath(objPage,po_slctFromAccountNumber),strFromAccount,"From Account")
+  Call WebActions.selectItem(FindPageChildElementByXPath(objPage,po_slctToAccountNumber),strToAccount, "To Account")
+End Function
+
+'#Function Description  : Function to Click Transfer Funds button  
+Function ClickBtnTransferFunds()
+  Call WebActions.ClickElement(FindPageChildElementByXPath(objPage,po_btnTransferFunds))
+End Function
+
+'#Function Description  : Function to check success message
+Function IsTransferMsgExists()
+  If  IsElementExist(FindPageChildElementByXPath(objPage,po_lblTransferCompleted)) Then
+    LogMessageWithImage "Trasfer completed Successfully"
+  Else
+    LogErrorWithImage "Trasfer Failed"
+  End If
+End Function

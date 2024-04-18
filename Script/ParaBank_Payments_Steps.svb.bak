@@ -1,0 +1,41 @@
+﻿'USEUNIT Allocator
+'USEUNIT CommonBusinessFunctions
+'USEUNIT ExcelDataAccess
+'USEUNIT FrameworkParameters
+'USEUNIT ParaBank_Payments_Page
+'USEUNIT TestParameters
+
+' [When I navigate to Bill Pay]
+Sub I_navigate_to_Bill_Pay()
+ Call ParaBank_Payments_Page.ClickLnkBillPay() 
+  Delay(2000)
+End Sub
+
+' [When I enter payee information {arg} {arg} {arg} {arg} {arg} {arg}]
+Sub I_enter_payee_information_(strPayeeName, strAddress, strCity, strState, strZipCode, strPhone)
+  msgbox objTestDataDict.Item(strPayeeName)
+   Call ParaBank_Payments_Page.Enterpayee_information(strPayeeName,objTestDataDict.Item(strPayeeName))
+   Call ParaBank_Payments_Page.Enterpayee_information(strAddress,objTestDataDict.Item(strAddress))
+   Call ParaBank_Payments_Page.Enterpayee_information(strCity,objTestDataDict.Item(strCity))
+   Call ParaBank_Payments_Page.Enterpayee_information(strState,objTestDataDict.Item(strState))
+   Call ParaBank_Payments_Page.Enterpayee_information(strZipCode,objTestDataDict.Item(strZipCode))
+   Call ParaBank_Payments_Page.Enterpayee_information(strPhone,objTestDataDict.Item(strPhone))
+End Sub
+
+' [When I enter account information {arg} {arg} {arg}]
+Sub I_enter_account_information_(AccountNumber, VerifyAccount, Amount)
+  Call ParaBank_Payments_Page.EnterAccount_information(AccountNumber,objTestDataDict.Item(AccountNumber))
+  Call ParaBank_Payments_Page.EnterAccount_information(VerifyAccount,objTestDataDict.Item(VerifyAccount))
+  Call ParaBank_Payments_Page.EnterAccount_information(Amount,objTestDataDict.Item(Amount))
+End Sub
+
+' [When I click on Send Payment]
+Sub I_click_on_Send_Payment()
+   Call ParaBank_Payments_Page.ClickBtnSendPayments()
+    Delay(2000)
+End Sub
+
+' [Then I should see Payment Message {arg}]
+Sub I_should_see_Payment_Message_(param1)
+  Call ParaBank_Payments_Page.IsPaymentMsgExists() 
+End Sub

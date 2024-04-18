@@ -1,0 +1,14 @@
+﻿'USEUNIT TestParameters
+
+Public Sub SetRuntimeProjectConfigs()
+ SetWebPageLoadingTimeout TestParameters.GetBrowserSyncMaxTimeout()
+ SetObjectSearchStrategy
+End Sub
+
+Public Sub SetWebPageLoadingTimeout(timeout)
+  Options.Web.WebPageLoadingTimeout = CLng(timeout * 1000)
+End Sub
+
+Public Sub SetObjectSearchStrategy()
+ Options.Run.ObjectSearchStrategy = Consts.searchBreadthFirst
+End Sub

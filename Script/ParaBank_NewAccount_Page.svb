@@ -1,0 +1,42 @@
+﻿'USEUNIT CommonPage
+'USEUNIT ExcelDataAccess
+'USEUNIT Allocator
+'USEUNIT TestParameters
+'USEUNIT FrameworkParameters
+'USEUNIT CommonBusinessFunctions
+'USEUNIT WebElementFinder
+'USEUNIT WebActions
+'USEUNIT ReportLogger
+'USEUNIT ReportingFunctions
+
+
+Private po_lnkOpenNewAccount : po_lnkOpenNewAccount ="xpath=//*[contains(text(),'Open New Account')]"
+Private po_slctAccountType : po_slctAccountType ="xpath=//select[@id='type']"
+Private po_btnOpenNewAccount : po_btnOpenNewAccount = "xpath=//input[@value='Open New Account']"
+Private po_lblCongratulations : po_lblCongratulations = "xpath=//*[contains(text(),'Congratulations, your account is now open.')]" 
+
+
+'#Function Description  : Function to Click on Open New Account link 
+Function ClickLnkOpenNewAccount()
+  Call WebActions.ClickElement(FindPageChildElementByXPath(objPage,po_lnkOpenNewAccount))
+End Function
+
+'#Function Description  : Function to select product Type (Checkings/Savings)
+Function SelectAccountType(slctProductType)
+  Delay(2000)
+  Call WebActions.selectItem(FindPageChildElementByXPath(objPage,po_slctAccountType),slctProductType,"Account Type")
+End Function
+
+'#Function Description  : Function to click Open New Account button
+Function ClickBtnOpenNewAccount()
+  Call WebActions.ClickElement(FindPageChildElementByXPath(objPage,po_btnOpenNewAccount))
+End Function
+
+'#Function Description  : Function to check success message
+Function IsMsgExists()
+  If IsElementExist(FindPageChildElementByXPath(objPage,po_lblCongratulations)) Then
+    LogMessage "New Account Opened Successfully"
+  Else
+    LogErrorWithImage "New Account Opening Failed"
+  End If
+End Function

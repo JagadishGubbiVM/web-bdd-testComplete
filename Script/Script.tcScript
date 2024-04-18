@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Root signature="{9252F941-DB23-4FCA-AA50-858B33BB4A19}" version="11.40">
+	<children>
+		<folder name="01_Framework_Core">
+			<child name="FrameworkParameters" key="{C2C16905-D090-4A70-8DEA-116C813AAB59}" path="FrameworkParameters.svb" />
+			<child name="RuntimeProjectConfigs" key="{53868410-3C90-48A4-82F3-AC31956E6A82}" path="RuntimeProjectConfigs.svb" />
+			<child name="TestParameters" key="{A31B5AFE-89EB-447F-8FD2-49092141DDB9}" path="TestParameters.svb" />
+		</folder>
+		<folder name="02_Framework_Constants">
+			<child name="ErrorConstants" key="{386821D0-F93E-42EE-A123-48D444E0A51F}" path="ErrorConstants.svb" />
+			<child name="QueryConstants" key="{B5735C5A-FA53-4D32-B9F1-AB3190A7C0E2}" path="QueryConstants.svb" />
+			<child name="TestConstants" key="{3C6C21A9-22AD-4010-A5C7-54DC6B0C198B}" path="TestConstants.svb" />
+		</folder>
+		<folder name="03_Test_Base">
+			<child name="Allocator" key="{7842F300-F853-4855-8E4C-1DC36F52964A}" path="Allocator.svb" />
+			<child name="TestBaseRunner" key="{1F90DBAC-E18C-41A4-8D2E-56C436264046}" path="TestBaseRunner.svb" />
+			<child name="WebTestRunner" key="{AC05E450-54C7-456B-8DDB-A01B00496FF2}" path="WebTestRunner.svb" />
+		</folder>
+		<folder name="04_Step_Definitions">
+			<child name="CommonSteps" key="{E98068EB-BB6A-4EDA-8259-84860A2BADD6}" path="CommonSteps.svb" />
+			<child name="ParaBank_Login_Steps" key="{1881FCF0-2041-4B3F-BE75-CEEC02CA7117}" path="ParaBank_Login_Steps.svb" />
+			<child name="ParaBank_NewAccount_Steps" key="{509314BB-2D2A-46A0-A508-0C2AC2F4AD41}" path="ParaBank_NewAccount_Steps.svb" />
+			<child name="ParaBank_TransferFunds_Steps" key="{362C3F5E-1394-456A-B64B-81822A4B0F39}" path="ParaBank_TransferFunds_Steps.svb" />
+			<child name="ParaBank_Payments_Steps" key="{BB25DBC5-2D5E-4B44-8C9B-FC8C4E39135E}" path="ParaBank_Payments_Steps.svb" />
+			<child name="ParaBank_RequestLoan_Steps" key="{33E16DFB-F8A5-4901-B54A-9363DE02E386}" path="ParaBank_RequestLoan_Steps.svb" />
+		</folder>
+		<folder name="05_Page_Objects_Repository">
+			<child name="CommonPage" key="{F793B465-AECB-41F5-AAAC-3E6F5750996A}" path="CommonPage.svb" />
+			<child name="ParaBank_Login_Page" key="{E8B8993F-80D6-40C7-9922-90B201698575}" path="ParaBank_Login_Page.svb" />
+			<child name="ParaBank_NewAccount_Page" key="{61DD6E29-F3E5-4540-8699-04ED74915F80}" path="ParaBank_NewAccount_Page.svb" />
+			<child name="ParaBank_TransferFunds_Page" key="{8CA882B3-B2F8-4310-806B-221DD56DFC1B}" path="ParaBank_TransferFunds_Page.svb" />
+			<child name="ParaBank_Payments_Page" key="{F4E2B5AE-5591-420A-9917-923243E3703D}" path="ParaBank_Payments_Page.svb" />
+			<child name="ParaBank_RequestLoan_Page" key="{6285A3E8-2B85-4AF6-B9B0-15F08451C3CA}" path="ParaBank_RequestLoan_Page.svb" />
+		</folder>
+		<folder name="06_Function_Libraries">
+			<folder name="Actions">
+				<child name="Alerts" key="{F84DE347-8B8D-4A18-A7A1-83A781DB10E6}" path="Alerts.svb" />
+				<child name="BrowserActions" key="{7EDF7582-18D1-494A-BE1E-9C8600792BFF}" path="BrowserActions.svb" />
+				<child name="Waits" key="{58293D02-082F-4D5D-8FFC-DF2B18B69ABF}" path="Waits.svb" />
+				<child name="WebActions" key="{37A492AF-979A-484F-B5AA-D89ECFB6C448}" path="WebActions.svb" />
+				<child name="WebElementFinder" key="{58B75066-A749-4B34-88A0-BF8606FB23E2}" path="WebElementFinder.svb" />
+			</folder>
+			<folder name="Business">
+				<child name="CommonBusinessFunctions" key="{233BD4B1-CDCE-4C1C-A02F-EFF9E576F126}" path="CommonBusinessFunctions.svb" />
+			</folder>
+			<folder name="Logger">
+				<child name="DevLogger" key="{87482F48-5D73-477F-986F-B7F31248C0BA}" path="DevLogger.svb" />
+				<child name="onLeavingPage" key="{322F678E-A34A-42D6-ABED-19BE2F603081}" path="onLeavingPage.svb" />
+				<child name="UnExpectedWindow" key="{989720F2-A28C-4033-80CE-C3D36552DF69}" path="UnExpectedWindow.svb" />
+			</folder>
+			<folder name="Reporting">
+				<child name="ReportBase" key="{922B508E-0F7D-46F3-B6A2-F0D96961FA5C}" path="ReportBase.svb" />
+				<child name="ReportingFunctions" key="{66EEB874-6E11-4977-B445-41590F97F02A}" path="ReportingFunctions.svb" />
+				<child name="ReportLogger" key="{A4D23194-A0BC-471A-A675-D6EC1E54E465}" path="ReportLogger.svb" />
+				<child name="ReportSettings" key="{ADD61785-AA4E-4267-8AC1-F291C18C17AE}" path="ReportSettings.svb" />
+				<child name="ReportTheme" key="{2628FAB9-AC63-42F9-9305-326E058A494D}" path="ReportTheme.svb" />
+			</folder>
+			<folder name="Utility">
+				<child name="CommonUtility" key="{57DAB818-A277-4151-B04E-124431D1DD68}" path="CommonUtility.svb" />
+				<child name="ExcelDataAccess" key="{4DF1773E-25C9-4B89-BF97-95CB19093D0E}" path="ExcelDataAccess.svb" />
+				<child name="XmlDataAccess" key="{B73D579D-2DCC-45F1-8DA8-1473F8DC998A}" path="XmlDataAccess.svb" />
+			</folder>
+		</folder>
+		<folder name="07_Script_Initialize">
+			<child name="InitScript" key="{C1579017-AD46-4E99-AE45-4262357131DD}" path="InitScript.svb" />
+		</folder>
+	</children>
+</Root>

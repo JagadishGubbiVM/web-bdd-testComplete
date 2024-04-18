@@ -1,0 +1,59 @@
+﻿'USEUNIT WebElementFinder
+'USEUNIT WebActions
+'USEUNIT Allocator
+'USEUNIT ReportLogger
+'USEUNIT TestParameters
+'USEUNIT CommonBusinessFunctions
+
+Public Function SelectProduct(strProductName)
+  strProductNameTab = RTrim(strProductName)
+  arrTabName = Split(strProductNameTab, " ")
+  strSelectTab = arrTabName(UBound(arrTabName))
+
+  arrProductTabPropNames = Array ("outerText", "contentText","ObjectType")
+  arrProductTabPropValues = Array (strSelectTab, strSelectTab, "Panel")
+  
+  If objPage.Find(arrProductTabPropNames, arrProductTabPropValues, 60, True).Exists Then
+    objPage.Find(arrProductTabPropNames, arrProductTabPropValues, 60, True).Click
+  Else
+    Log.Message ""&strSelecctTab&" is not displayed"
+  End If
+  Delay 3000
+  
+  strSelectProduct = strProductName
+  arrProductPropNames = Array ("contentText","ObjectType","className")
+  arrProductPropValues = Array (strSelectProduct,"TextNode","prodTitle")
+
+  If objPage.Find(arrProductPropNames, arrProductPropValues, 80, True).Exists Then
+    objPage.Find(arrProductPropNames, arrProductPropValues, 80, True).Click
+  Else
+    Log.Message ""&strSelectProduct&" is not displayed"
+  End If
+  
+  Delay 2000
+  arrAddToCartPropNames = Array ("outerText", "contentText","ObjectType")
+  arrAddToCardPropValues = Array ("Add to Cart", "Add to Cart", "Button")
+  If objPage.Find(arrAddToCartPropNames, arrAddToCardPropValues, 60, True).Exists Then
+    objPage.Find(arrAddToCartPropNames, arrAddToCardPropValues, 60, True).Click
+    Delay 5000
+  Else
+    Log.Message "Add to Cart Button is not displayed"
+  End If
+End Function
+
+Public Function ValidatingProduct(strAddedProductName)
+  arrProductPropNames = Array ("contentText","className")
+  arrProductPropValues = Array (strAddedProductName,"")
+ Set objPage= Sys.Browser("iexplore").Page("*")
+ 
+  If objPage.Find(arrProductPropNames, arrProductPropValues, 80, True).Exists Then
+  Log.Message ""&strAddedProductName&"is added to the cart"
+  Else
+    Log.Message ""&strAddedProductName&" is not added to the cart"
+  End If
+  
+End Function
+
+Function Test2
+Call ValidatingProduct("Business Advantage Plus Checking")
+End Function

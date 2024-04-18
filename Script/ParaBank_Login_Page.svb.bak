@@ -1,0 +1,62 @@
+﻿'USEUNIT CommonPage
+'USEUNIT ExcelDataAccess
+'USEUNIT Allocator
+'USEUNIT TestParameters
+'USEUNIT FrameworkParameters
+'USEUNIT CommonBusinessFunctions
+'USEUNIT WebElementFinder
+'USEUNIT WebActions
+'USEUNIT ReportLogger
+'USEUNIT ReportingFunctions
+
+'Login Page objects
+Private po_lblLogin : po_lblLogin="css=img[title='ParaBank']" 
+Private po_txtUserId : po_txtUserId ="css=input[name='username']"
+Private po_txtPassword : po_txtPassword ="css=input[name='password']"
+Private po_btnLogIn : po_btnLogIn ="xpath=//input[@value='Log In']"
+Private po_lblHome : po_lblHome = "xpath=//div[@id='leftPanel']//child::b[1]" 
+Private po_btnOk_SignOut : po_btnOk_SignOut ="xpath=//*[contains(text(),'Log Out')]"
+
+
+'#Function Description  : Function to check Login Page is displayed
+Function IsLoginPageExist()
+  If   IsElementExist(FindElementByCss(objPage,po_lblLogin)) Then
+    LogMessage "Login Page is displayed"
+  Else
+    LogErrorWithImage "Login Page is not displayed"
+  End If
+End Function
+
+'#Function Description  : Function to enter user name
+Function EnterUserId(dbStrUserId)
+  Call WebActions.ClickElement(FindElementByCss(objPage,po_lblLogin))
+  Call WebActions.ClickElementAndLog(FindElementByCss(objPage,po_txtUserId),"Username")
+  Call WebActions.SetKeys(FindElementByCss(objPage,po_txtUserId),dbStrUserId)
+End Function
+
+'#Function Description  : Function to enter Password
+Function EnterPassword(dbStrPassword)
+  Call WebActions.ClickElementAndLog(FindElementByCss(objPage,po_txtPassword),"Password")
+  Call WebActions.SetKeys(FindElementByCss(objPage,po_txtPassword),dbStrPassword)
+End Function
+
+'#Function Description  : Function to click login button
+Function ClickLogInButton()
+  Call WebActions.ClickElement(FindPageChildElementByXPath(objPage,po_btnLogIn))
+  Call ReportingFunctions.takeScreenshot()
+End Function
+
+'#Function Description  : Function to check Para Bank Home Page is displayed
+Function IsHomePageExists()
+  If IsElementExist(FindPageChildElementByXPath(objPage,po_lblHome)) Then    
+    LogMessageWithImage "Home page is Dispalyed"
+  Else
+    LogErrorWithImage "Home page is not Dispalyed"
+  End If
+End Function
+
+'#Function Description  : Function to click signout link
+Function ClickSignOut()
+  Call WebActions.ClickElement(FindPageChildElementByXPath(objPage,po_btnOk_SignOut))
+  Delay(2000)
+End Function
